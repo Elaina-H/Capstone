@@ -6,5 +6,5 @@
 - List of Available Study Rooms in Edmon Low Library
 ## Non-Functional Requirements
 - Password-Protected secure room
-- Collaboration for up to X people
+- Collaboration for up to 10 people
 ## Project Setup
