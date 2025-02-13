@@ -268,14 +268,15 @@ html, body {
   outline: none;
   padding: 0 10px;
   font-size: 1rem;
-  color: var(--primary-txt);
+  color: white;
 }
 
 
 .delete-event-btn {
+  background-color: var(--primary-bkg);
+  color: white;
   padding: 5px 10px;
   margin-top: 5px;
-  background-color: #f44336;
   color: white;
   border: none;
   border-radius: 5px;

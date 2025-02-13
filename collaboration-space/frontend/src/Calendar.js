@@ -95,7 +95,7 @@ const Calendar = () => {
     }
     setDays(daysArr);
   };
-//possible delete funciton, not implemented
+//possible delete funciton
   const deleteEvent = (eventToDelete) => {
     const updatedEvents = eventsArr.filter(event => event !== eventToDelete);
     setEventsArr(updatedEvents);
@@ -241,7 +241,7 @@ const Calendar = () => {
 			  <div className="event-time">
 				<span className="event-time">{event.events[0].time}</span>
 			  </div>
-				<button onClick={() => deleteEvent(event)}>Delete</button>
+				<button className="delete-event-btn" onClick={() => deleteEvent(event)}>Delete</button>
 			  </div>
           ))}
         </div>
