@@ -1,6 +1,7 @@
 import './App.css';
 import React from 'react';
 import Calendar from './Calendar';
+// import ToDo from './ToDo';
 
 function App() {
   return (
@@ -9,7 +10,8 @@ function App() {
         
       </header>
 	  <main>
-		<Calendar />
+      <Calendar />
+      {/* <ToDo /> */}
 	  </main>	
     </div>
   );
