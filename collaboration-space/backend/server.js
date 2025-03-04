@@ -24,9 +24,18 @@ db.connect(err => {
     console.log('Connected to MySQL as id ' + db.threadId);
 });
 
-
-
 //display onto a webbrowser
 app.listen(8081, ()=> {
     console.log("Listening");
 })
+
+//API endpoints
+app.get('/data', (req, res) => {
+    const sql = 'SELECT * FROM events';
+    db.query(sql, (err, result) => {
+        if (err) {
+            return res.status(500).send(err);
+        }
+        res.send(result);
+    })
+});
