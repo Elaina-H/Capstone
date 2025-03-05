@@ -37,6 +37,58 @@ html, body {
   overflow: hidden;
 }
 
+.left h2 {
+  margin-bottom: 20px;
+}
+
+.left input {
+  width: calc(100% - 22px);
+  padding: 10px;
+  margin-bottom: 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.left button {
+  padding: 10px 20px;
+  border: none;
+  background-color: var(--primary-bkg);
+  color: white;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.left ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+.left li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  border-bottom: 1px solid #ddd;
+  word-wrap: break-word;
+}
+
+.left li span {
+  flex: 1;
+  word-break: break-word;
+  margin-right: 10px;
+}
+
+
+.left li button {
+  background-color: #d32f2f;
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  border-radius: 4px;
+  cursor: pointer;
+
+}
+
 .right {
   width: 35%;
   background-color: #ffffff;
