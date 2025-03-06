@@ -118,7 +118,7 @@ const Calendar = ({ eventsArr, addEvent, deleteEventAndTask }) => {
     setEventsArr(updatedEvents);
     localStorage.setItem('events', JSON.stringify(updatedEvents));
   };
-  */
+  
 
 /* allows Calendar to display past month on button press */
   const prevMonth = () => {
