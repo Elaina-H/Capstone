@@ -1,6 +1,20 @@
 import React, { useState, useEffect } from 'react';
 import './Calendar.css'; 
 
+/*
+To fix with DB Update:
+deleteEvent()
+addEvent()
+getWeekEvents()
+getMonthEvents()
+return ( 
+	display events for selected day
+)
+
+Bugs:
+- scroll goes to specified pixel instead of directly to the element
+*/
+
 
 const Calendar = ({ eventsArr, addEvent, deleteEventAndTask }) => {
   const months = [
@@ -17,7 +31,8 @@ const Calendar = ({ eventsArr, addEvent, deleteEventAndTask }) => {
     "November",
     "December",
   ];
-
+  
+	
   const [activeDay, setActiveDay] = useState(new Date().getDate());
   const [month, setMonth] = useState(new Date().getMonth());
   const [year, setYear] = useState(new Date().getFullYear());
@@ -31,9 +46,11 @@ const Calendar = ({ eventsArr, addEvent, deleteEventAndTask }) => {
   const [currentTime, setCurrentTime] = useState("");
 
   const [eventDate, setEventDate] = useState("");
+  
+  
 
 
-  // Update the time every second
+  /* Update the time every second */
   useEffect(() => {
     const intervalId = setInterval(() => {
       const now = new Date();
@@ -52,7 +69,7 @@ const Calendar = ({ eventsArr, addEvent, deleteEventAndTask }) => {
     const prevLastDate = new Date(year, month, 0).getDate();
     const daysArr = [];
 
-    // Previous month's days (fill in)
+    /* Previous month's days (fill in) */
     for (let x = firstDay; x > 0; x--) {
       daysArr.push(
         <div key={`prev-${x}`} className="day prev-date">
@@ -61,7 +78,7 @@ const Calendar = ({ eventsArr, addEvent, deleteEventAndTask }) => {
       );
     }
 
-    // Current month's days
+    /* Current month's days */
     for (let day = 1; day <= lastDate; day++) {
       const isToday =
         day === new Date().getDate() &&
@@ -82,7 +99,7 @@ const Calendar = ({ eventsArr, addEvent, deleteEventAndTask }) => {
       );
     }
 
-    // Fill next month's days
+    /* Fill next month's days */
     const nextDays = 7 - (daysArr.length % 7);
     for (let j = 1; j <= nextDays; j++) {
       daysArr.push(
@@ -93,8 +110,9 @@ const Calendar = ({ eventsArr, addEvent, deleteEventAndTask }) => {
     }
     setDays(daysArr);
   };
-//possible delete funciton
-/*
+
+/* possible delete funciton FIX W/ DATA BASE */
+
   const deleteEvent = (eventToDelete) => {
     const updatedEvents = eventsArr.filter(event => event !== eventToDelete);
     setEventsArr(updatedEvents);
@@ -102,6 +120,7 @@ const Calendar = ({ eventsArr, addEvent, deleteEventAndTask }) => {
   };
   */
 
+/* allows Calendar to display past month on button press */
   const prevMonth = () => {
     const newDate = new Date(year, month, 1);
     newDate.setMonth(newDate.getMonth() - 1);
@@ -110,6 +129,7 @@ const Calendar = ({ eventsArr, addEvent, deleteEventAndTask }) => {
     setActiveDay(newDate.getDate());
   };
 
+/* allows Calendar to display next month on button press */
   const nextMonth = () => {
     const newDate = new Date(year, month, 1);
     newDate.setMonth(newDate.getMonth() + 1);
@@ -118,7 +138,12 @@ const Calendar = ({ eventsArr, addEvent, deleteEventAndTask }) => {
     setActiveDay(newDate.getDate());
   };
 
+
+  
+  /* update with adding dates to database*/
+ 
   const addNewEvent = () => {
+
     const [year, month, day] = eventDate.split("-").map(Number);
 	const newEvent = {
 	  day: day,
@@ -141,11 +166,10 @@ const Calendar = ({ eventsArr, addEvent, deleteEventAndTask }) => {
 	
     setShowEventForm(false);
   };
-  
 
 
   
-
+	/* update to display events from database*/
   const getWeekEvents = () => {
 	  const today = new Date();
 	  const firstDayOfWeek = today.getDate() - today.getDay(); // Start of week
@@ -160,13 +184,14 @@ const Calendar = ({ eventsArr, addEvent, deleteEventAndTask }) => {
 	  });
 	};
 
-
+	/* update to display events from database*/
   const getMonthEvents = () => {
     return eventsArr.filter(
       (event) => event.month === month + 1 && event.year === year
     );
   };
-// below is actual Display
+  
+/* below is actual Display */
   return (
     <div className="container">
       {/* Left Panel (Calendar) */}
@@ -174,9 +199,9 @@ const Calendar = ({ eventsArr, addEvent, deleteEventAndTask }) => {
         <div className="cascade-layer"></div>
         <div className="calendar">
           <div className="month">
-            <i className="fas fa-angle-left prev" onClick={prevMonth}></i>
+            <button className="prev-month" onClick={prevMonth}></button>
             <div className="date">{months[month]} {year}</div>
-            <i className="fas fa-angle-right next" onClick={nextMonth}></i>
+            <button className="next-month" onClick={nextMonth}></button>
           </div>
 
           <div className="weekdays">
@@ -192,10 +217,12 @@ const Calendar = ({ eventsArr, addEvent, deleteEventAndTask }) => {
           <div className="days">
             {days}
           </div>
-
-          
+		  {/* FIX: should scroll to element instead of to pixel */}
+		  <button className = "scr-todo" onClick={() => window.scrollTo({ top: 600, behavior: 'smooth' })}> Scroll to your ToDo list</button>
+		  <button className = "scr-library" onClick={() => window.scrollTo({ top: 1270, behavior: 'smooth' })}> Scroll to view Library rooms</button>
         </div>
       </div>
+	  
 
       {/* Right Panel (Event Details) */}
       <div className="event-details">
@@ -215,9 +242,10 @@ const Calendar = ({ eventsArr, addEvent, deleteEventAndTask }) => {
 			} else {
 				<div>No events this week</div>
 			}
-				
+			
 		   </div>
 		  </div>
+		  
 		  {/* FIXME Display this month's events */}
           <div className="dropdown">
             <button className="dropbtn">Upcoming Events This Month</button>
@@ -226,6 +254,7 @@ const Calendar = ({ eventsArr, addEvent, deleteEventAndTask }) => {
                 <div key={index}>{event.day} {months[event.month - 1]}: {event.events[0].title} ({event.events[0].time})</div>
               ))}
             </div>
+			
           </div>
         </div>
         

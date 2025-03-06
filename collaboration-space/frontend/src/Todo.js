@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import './Todo.css'; 
 
+
+
 const Todo = ({ tasks, addTask, deleteEventAndTask }) => {
 
   const [taskInput, setTaskInput] = useState("");
@@ -40,6 +42,7 @@ const Todo = ({ tasks, addTask, deleteEventAndTask }) => {
       </div>
     </div>
   );
+
 };
 
 export default Todo;
