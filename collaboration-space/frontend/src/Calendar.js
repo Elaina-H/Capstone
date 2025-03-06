@@ -111,15 +111,6 @@ const Calendar = ({ eventsArr, addEvent, deleteEventAndTask }) => {
     setDays(daysArr);
   };
 
-/* possible delete funciton FIX W/ DATA BASE */
-
-  const deleteEvent = (eventToDelete) => {
-    const updatedEvents = eventsArr.filter(event => event !== eventToDelete);
-    setEventsArr(updatedEvents);
-    localStorage.setItem('events', JSON.stringify(updatedEvents));
-  };
-  
-
 /* allows Calendar to display past month on button press */
   const prevMonth = () => {
     const newDate = new Date(year, month, 1);
