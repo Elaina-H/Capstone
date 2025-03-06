@@ -16,7 +16,7 @@ Bugs:
 */
 
 
-const Calendar = () => {
+const Calendar = ({ eventsArr, addEvent, deleteEventAndTask }) => {
   const months = [
     "January",
     "February",
@@ -38,9 +38,7 @@ const Calendar = () => {
   const [year, setYear] = useState(new Date().getFullYear());
   const [days, setDays] = useState([]);
   /* FIXME will need to change to database somehow */
-  const [eventsArr, setEventsArr] = useState(
-    JSON.parse(localStorage.getItem("events")) || []
-  );
+  
   const [showEventForm, setShowEventForm] = useState(false);
   const [eventName, setEventName] = useState("");
   const [eventTimeFrom, setEventTimeFrom] = useState("");
@@ -112,12 +110,15 @@ const Calendar = () => {
     }
     setDays(daysArr);
   };
+
 /* possible delete funciton FIX W/ DATA BASE */
+
   const deleteEvent = (eventToDelete) => {
     const updatedEvents = eventsArr.filter(event => event !== eventToDelete);
     setEventsArr(updatedEvents);
     localStorage.setItem('events', JSON.stringify(updatedEvents));
   };
+  */
 
 /* allows Calendar to display past month on button press */
   const prevMonth = () => {
@@ -137,9 +138,12 @@ const Calendar = () => {
     setActiveDay(newDate.getDate());
   };
 
+
   
   /* update with adding dates to database*/
-  const addEvent = () => {
+ 
+  const addNewEvent = () => {
+
     const [year, month, day] = eventDate.split("-").map(Number);
 	const newEvent = {
 	  day: day,
@@ -150,10 +154,10 @@ const Calendar = () => {
     };
 
 
-    const updatedEvents = [...eventsArr, newEvent];
+    /*const updatedEvents = [...eventsArr, newEvent];
     setEventsArr(updatedEvents);
-    localStorage.setItem("events", JSON.stringify(updatedEvents));
-
+    localStorage.setItem("events", JSON.stringify(updatedEvents));*/
+    addEvent(newEvent);
     setEventName("");
     setEventTimeFrom("");
     setEventTimeTo("");
@@ -266,7 +270,7 @@ const Calendar = () => {
 			  <div className="event-time">
 				<span className="event-time">{event.events[0].time}</span>
 			  </div>
-				<button className="delete-event-btn" onClick={() => deleteEvent(event)}>Delete</button>
+				<button className="delete-event-btn" onClick={() => deleteEventAndTask(event, index)}>Delete</button>
 			  </div>
           ))}
         </div>
@@ -285,7 +289,7 @@ const Calendar = () => {
 			  <input type="date" placeholder="Event Date" value={eventDate} onChange={(e) => setEventDate(e.target.value)} />
             </div>
             <div className="add-event-footer">
-              <button className="add-event-btn" onClick={addEvent}>Add Event</button>
+              <button className="add-event-btn" onClick={addNewEvent}>Add Event</button>
             </div>
           </div>
         )}
