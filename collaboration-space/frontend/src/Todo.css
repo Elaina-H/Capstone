@@ -19,9 +19,10 @@ html, body {
 .outer {
   display: flex;
   justify-content: center;
-  padding-top: 3%;
+  padding-top: 0%;
+  padding-bottom: 0%;
   width: 100%; /* Make sure it's 100% of the screen width */
-  height: 80%; /* Make sure it's 100% of the screen height */
+  height: 100%; /* Make sure it's 100% of the screen height */
   min-height: 78.40vh;
   overflow: hidden;
 }
@@ -30,7 +31,6 @@ html, body {
 .left {
   width: 60%;
   position: relative;
-  padding: 20px;
   background-color: #f9f9f9;
   border-radius: 8px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
@@ -41,6 +41,5 @@ html, body {
   width: 35%;
   background-color: #ffffff;
   border-radius: 8px;
-  padding: 20px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }

@@ -5,13 +5,18 @@ import Todo from './Todo';
 import Studyroom from './Studyroom';
 
 function App() {
-  return (
+
+ return (
     <div className="App">
       <header className="App-header">
       </header>
 	  <main>
+	    <section id = "CalendarSection">
 		<Calendar />
+		</section>
+		<section id = "TodoSection">
 		<Todo />
+		</section>
 		<Studyroom />
 	  </main>	
     </div>
