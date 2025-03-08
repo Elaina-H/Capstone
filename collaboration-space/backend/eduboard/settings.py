@@ -81,6 +81,21 @@ DATABASES = {
     }
 }
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sql_server.pyodbc',
+#         'NAME': 'EduBoardDB',
+#         'USER': '',  # Leave blank for integrated authentication
+#         'PASSWORD': '',  # Leave blank for integrated authentication
+#         'HOST': 'educapstone-server.database.windows.net',
+#         'PORT': '1433',
+#         'OPTIONS': {
+#             'driver': 'ODBC Driver 17 for SQL Server',
+#             'authentication': 'ActiveDirectoryIntegrated',
+#         },
+#     }
+# }
+
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators

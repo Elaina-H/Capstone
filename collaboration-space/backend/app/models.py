@@ -1,15 +1,14 @@
 from django.db import models
+from azure.identity import DefaultAzureCredential
+import pyodbc 
 
-# from azure.identity import DefaultAzureCredential
-# import pyodbc 
+# Use DefaultAzureCredential to authenticate
+#credential = DefaultAzureCredential()
 
-# # Use DefaultAzureCredential to authenticate
-# credential = DefaultAzureCredential()
+# Get the token for Azure SQL Database
+#token = credential.get_token("https://database.windows.net/.default").token
 
-# # Get the token for Azure SQL Database
-# token = credential.get_token("https://database.windows.net/.default").token
-
-# # Connection string for Azure SQL Database
+# Connection string for Azure SQL Database
 # conn_str = 'DRIVER={ODBC Driver 17 for SQL Server};' \
 #            'SERVER=educapstone-server.database.windows.net;' \
 #            'DATABASE=EduBoardDB;' \
