@@ -74,27 +74,27 @@ WSGI_APPLICATION = 'eduboard.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
-}
-
 # DATABASES = {
 #     'default': {
-#         'ENGINE': 'django.db.backends.sql_server.pyodbc',
-#         'NAME': 'EduBoardDB',
-#         'USER': '',  # Leave blank for integrated authentication
-#         'PASSWORD': '',  # Leave blank for integrated authentication
-#         'HOST': 'educapstone-server.database.windows.net',
-#         'PORT': '1433',
-#         'OPTIONS': {
-#             'driver': 'ODBC Driver 17 for SQL Server',
-#             'authentication': 'ActiveDirectoryIntegrated',
-#         },
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': BASE_DIR / 'db.sqlite3',
 #     }
 # }
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'mssql',
+        'NAME': 'EduBoardDB',
+        'USER': 'databaseDevNerds8',  # Leave blank for integrated authentication
+        'PASSWORD': 'sql_capstonedevs2025',  # Leave blank for integrated authentication
+        'HOST': 'educapstone-server.database.windows.net',
+        'PORT': '1433',
+        'OPTIONS': {
+            # 'encrypt': True,
+            # 'trustServerCertificate': False
+        },
+    }
+}
 
 
 # Password validation
