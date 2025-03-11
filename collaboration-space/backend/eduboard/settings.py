@@ -85,13 +85,12 @@ DATABASES = {
     'default': {
         'ENGINE': 'mssql',
         'NAME': 'EduBoardDB',
-        'USER': 'databaseDevNerds8',  # Leave blank for integrated authentication
-        'PASSWORD': 'sql_capstonedevs2025',  # Leave blank for integrated authentication
+        'USER': 'databaseDevNerds8',
+        'PASSWORD': 'sql_capstonedevs2025', 
         'HOST': 'educapstone-server.database.windows.net',
         'PORT': '1433',
         'OPTIONS': {
-            # 'encrypt': True,
-            # 'trustServerCertificate': False
+            'driver': 'ODBC Driver 18 for SQL Server',
         },
     }
 }
