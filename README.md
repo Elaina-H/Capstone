@@ -8,3 +8,5 @@
 - Password-Protected secure room
 - Collaboration for up to 10 people
 ## Project Setup
+- With Node.js installed, navigate cd to frontend/src
+- run npm start on command line
