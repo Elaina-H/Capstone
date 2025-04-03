@@ -50,7 +50,6 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-# changed this and it worked
 ROOT_URLCONF = 'app.urls'
 
 TEMPLATES = [
@@ -86,8 +85,8 @@ DATABASES = {
     'default': {
         'ENGINE': 'mssql',
         'NAME': 'EduBoardDB',
-        'USER': 'databaseDevNerds8',
-        'PASSWORD': 'sql_capstonedevs2025', 
+        'USER': 'testTempUser',
+        'PASSWORD': 'userRightsMatter32', 
         'HOST': 'educapstone-server.database.windows.net',
         'PORT': '1433',
         'OPTIONS': {

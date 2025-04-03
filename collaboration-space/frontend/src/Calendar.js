@@ -133,36 +133,16 @@ const Calendar = ({ eventsArr, addEvent, deleteEventAndTask }) => {
   
   /* update with adding dates to database*/
  
-  const addNewEvent = async () => {
+  const addNewEvent = () => {
 
     const [year, month, day] = eventDate.split("-").map(Number);
-	  const newEvent = {
-	    day: day,
+	const newEvent = {
+	  day: day,
       month: month,
       year: year,
-      title: eventName,
-      timeFrom: eventTimeFrom,
-      timeTo: eventTimeTo,
-      //events: [{ title: eventName, time: `${eventTimeFrom} - ${eventTimeTo}` }],
+      events: [{ title: eventName, time: `${eventTimeFrom} - ${eventTimeTo}` }],
+
     };
-
-    try {
-        const response = await fetch("/api/add-event", { // This points to your backend endpoint
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(newEvent),
-        });
-
-        if (response.ok) {
-            console.log("Event added successfully!");
-            // Optionally fetch updated events from the database to refresh the UI
-        } else {
-            const errorData = await response.json();
-            console.error("Error adding event:", errorData);
-        }
-    } catch (err) {
-        console.error("Error:", err);
-    }
 
 
     /*const updatedEvents = [...eventsArr, newEvent];
@@ -172,10 +152,13 @@ const Calendar = ({ eventsArr, addEvent, deleteEventAndTask }) => {
     setEventName("");
     setEventTimeFrom("");
     setEventTimeTo("");
-	  setEventDate("");
+	setEventDate("");
+	
     setShowEventForm(false);
   };
 
+
+  
 	/* update to display events from database*/
   const getWeekEvents = () => {
 	  const today = new Date();

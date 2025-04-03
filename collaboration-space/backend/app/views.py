@@ -34,6 +34,6 @@ def fetch_events(request):
     if request.method == "GET":
         month = request.GET.get("month")
         year = request.GET.get("year")
-        events = Event.objects.filter(month=month, year=year).values()
-        return JsonResponse(list(events), safe=False)
+        eventObjects = Event.objects.filter(month=month, year=year).values()
+        return JsonResponse(list(eventObjects), safe=False)
 
