@@ -85,8 +85,8 @@ DATABASES = {
     'default': {
         'ENGINE': 'mssql',
         'NAME': 'EduBoardDB',
-        'USER': 'testTempUser',
-        'PASSWORD': 'userRightsMatter32', 
+        'USER': 'databaseDevNerds8',
+        'PASSWORD': 'sql_capstonedevs2025', 
         'HOST': 'educapstone-server.database.windows.net',
         'PORT': '1433',
         'OPTIONS': {
