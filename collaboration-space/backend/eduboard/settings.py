@@ -50,7 +50,8 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-ROOT_URLCONF = 'eduboard.urls'
+# changed this and it worked
+ROOT_URLCONF = 'app.urls'
 
 TEMPLATES = [
     {
