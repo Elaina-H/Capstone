@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import './Calendar.css'; 
+import axios from 'axios';
 
 /*
 To fix with DB Update:
@@ -134,27 +135,36 @@ const Calendar = ({ eventsArr, addEvent, deleteEventAndTask }) => {
   /* update with adding dates to database*/
  
   const addNewEvent = () => {
-
     const [year, month, day] = eventDate.split("-").map(Number);
-	const newEvent = {
-	  day: day,
+	  const newEvent = {
+	    day: day,
       month: month,
       year: year,
-      events: [{ title: eventName, time: `${eventTimeFrom} - ${eventTimeTo}` }],
-
+      title: eventName,
+      time_from: eventTimeFrom,
+      time_to: eventTimeTo,
+      //events: [{ title: eventName, time: `${eventTimeFrom} - ${eventTimeTo}` }],
     };
 
+    axios.post('http://127.0.0.1:8000/api/add_event/', newEvent)
+      .then(response => {
+        console.log("Event added: ", response.data);
+        addEvent(newEvent);
+        setEventName("");
+        setEventTimeFrom("");
+        setEventTimeTo("");
+        setEventDate("");
+        setShowEventForm(false);
+      })
+      .catch(error => {
+        console.error("Error adding an event: ", error);
+        alert("Error adding event.");
+      });
 
     /*const updatedEvents = [...eventsArr, newEvent];
     setEventsArr(updatedEvents);
     localStorage.setItem("events", JSON.stringify(updatedEvents));*/
-    addEvent(newEvent);
-    setEventName("");
-    setEventTimeFrom("");
-    setEventTimeTo("");
-	setEventDate("");
-	
-    setShowEventForm(false);
+    
   };
 
 
