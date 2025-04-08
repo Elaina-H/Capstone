@@ -38,9 +38,27 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'app',
+    'corsheaders',  # Django needs middleware to handle CORS settings
+]
+
+# CORS_ALLOW_ALL_ORIGINS = True
+# CORS_ORIGIN_ALLOW_ALL = False
+# CORS_ORIGIN_WHITELIST = (
+#   'http://localhost:8000',
+# )
+CORS_ALLOWED_ORIGINS = [
+    'http://localhost:3000'
+]
+CSRF_COOKIE_NAME = 'csrftoken'
+CSRF_HEADER_NAME = 'X-CSRFToken'
+CSRF_COOKIE_HTTPONLY = False 
+
+CSRF_TRUSTED_ORIGINS = [
+    'http://localhost:3000',  # Your React app's URL
 ]
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',    #Allow for website to have access to database
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -48,6 +66,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    
 ]
 
 ROOT_URLCONF = 'app.urls'
@@ -94,6 +113,7 @@ DATABASES = {
         },
     }
 }
+
 
 
 # Password validation

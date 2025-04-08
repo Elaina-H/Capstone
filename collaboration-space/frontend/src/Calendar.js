@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './Calendar.css'; 
 import axios from 'axios';
+import Cookies from 'js-cookie';
 
 /*
 To fix with DB Update:
@@ -15,6 +16,17 @@ return (
 Bugs:
 - scroll goes to specified pixel instead of directly to the element
 */
+
+// function getCsrfToken() {
+//   const cookies = document.cookie.split(';');
+//   for (let i = 0; i < cookies.length; i++) {
+//     const cookie = cookies[i].trim();
+//     if (cookie.startsWith('csrftoken=')) {
+//       return cookie.substring('csrftoken='.length);
+//     }
+//   }
+//   return null; // Return null if the token isn't found
+// }
 
 
 const Calendar = ({ eventsArr, addEvent, deleteEventAndTask }) => {
@@ -130,12 +142,11 @@ const Calendar = ({ eventsArr, addEvent, deleteEventAndTask }) => {
     setActiveDay(newDate.getDate());
   };
 
-
-  
   /* update with adding dates to database*/
  
-  const addNewEvent = () => {
+  const addNewEvent = async () => {
     const [year, month, day] = eventDate.split("-").map(Number);
+    
 	  const newEvent = {
 	    day: day,
       month: month,
@@ -143,10 +154,35 @@ const Calendar = ({ eventsArr, addEvent, deleteEventAndTask }) => {
       title: eventName,
       time_from: eventTimeFrom,
       time_to: eventTimeTo,
-      //events: [{ title: eventName, time: `${eventTimeFrom} - ${eventTimeTo}` }],
+      // events: [{ title: eventName, time: `${eventTimeFrom} - ${eventTimeTo}` }],
     };
+    console.log("Year:", year);  
+    console.log("Month:", month); 
+    console.log("Day:", day);
+    console.log("Title:", eventName);
+    console.log("Time:", eventTimeFrom, " ", eventTimeTo);
 
-    axios.post('http://127.0.0.1:8000/api/add_event/', newEvent)
+    // console.log('Event data:', newEvent);
+
+    // await Event.create(new Event);
+    // const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+    const csrfToken = Cookies.get('csrftoken');
+
+
+    axios.post('http://127.0.0.1:8000/api/add_event/', newEvent, { 
+      //Test values
+      day: 15,
+      month: 4,
+      year: 2025,
+      title: 'Sample Event',
+      time_from: '10:00',
+      time_to: '12:00'
+    }, {
+      headers: {
+        'X-CSRFToken': csrfToken, // Add a method to retrieve the token
+        'Content-Type': 'application/json',
+      }
+    })
       .then(response => {
         console.log("Event added: ", response.data);
         addEvent(newEvent);
@@ -160,7 +196,6 @@ const Calendar = ({ eventsArr, addEvent, deleteEventAndTask }) => {
         console.error("Error adding an event: ", error);
         alert("Error adding event.");
       });
-
     /*const updatedEvents = [...eventsArr, newEvent];
     setEventsArr(updatedEvents);
     localStorage.setItem("events", JSON.stringify(updatedEvents));*/
