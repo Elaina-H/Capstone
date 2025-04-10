@@ -36,59 +36,93 @@ function App() {
 
   
   const addEvent = async (event) => {
-    // const updatedEvents = [...eventsArr, event];
-    // setEventsArr(updatedEvents);
-    // localStorage.setItem("events", JSON.stringify(updatedEvents));
+    const updatedEvents = [...eventsArr, event];
+    setEventsArr(updatedEvents);
+    localStorage.setItem("events", JSON.stringify(updatedEvents));
+    addTask(event.EventName);
     // addTask(event.events[0].title);
     
 
-    try {
-      // Send the event to the backend to store it in the database
-      const response = await fetch('http://127.0.0.1:8000/api/fetch_events', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(event.eventName),
-      });
+    // try {
+    //   // Send the event to the backend to store it in the database
+    //   const response = await fetch('http://127.0.0.1:8000/api/add_event/', {
+    //     method: 'POST',
+    //     headers: {
+    //       'Content-Type': 'application/json',
+    //     },
+    //     body: JSON.stringify(event.eventName),
+    //   });
   
-      if (!response.ok) {
-        throw new Error('Failed to save event to the database');
-      }
+    //   if (!response.ok) {
+    //     throw new Error('Failed to save event to the database');
+    //   }
   
-      const savedEvent = await response.json();
+    //   const savedEvent = await response.json();
   
-      // Update the local state with the newly saved event
-      const updatedEvents = [...eventsArr, savedEvent];
-      setEventsArr(updatedEvents);
+    //   // Update the local state with the newly saved event
+    //   const updatedEvents = [...eventsArr, savedEvent];
+    //   setEventsArr(updatedEvents);
   
-      // Add the task based on the event title
-      addTask(savedEvent.title);
-      console.log("saved event: ", savedEvent.title);
-      localStorage.setItem("events", JSON.stringify(updatedEvents));
-    } catch (error) {
-      console.error('Error adding event:', error);
-    }
+    //   // Add the task based on the event title
+    //   addTask(savedEvent.title);
+    //   console.log("saved event: ", savedEvent.title);
+    //   localStorage.setItem("events", JSON.stringify(updatedEvents));
+    // } catch (error) {
+    //   console.error('Error adding event:', error);
+    // }
   };
 
+
+  // const deleteEventAndTask = (eventToDelete, taskIndex) => {
+  //   if (eventToDelete) {
+  //     //removing event from eventsArr
+  //     setEventsArr((eventsArr) => eventsArr.filter((event) => event !== eventToDelete));
+
+  //     // finding corresponding task in tasks and removing it
+  //     const taskToDelete = eventToDelete.events[0].title;
+  //     setTasks((tasks) => tasks.filter((task) => task !== taskToDelete));
+  //   } else {
+  //     // removing task from tasks
+  //     const taskToDelete = tasks[taskIndex];
+  //     setTasks((tasks) => tasks.filter((_, i) => i !== taskIndex));
+
+  //     // removing corresponding event from eventsArr
+  //     setEventsArr((eventsArr) => eventsArr.filter((event) => event.events[0].title !== taskToDelete));
+  //   }
+  // };
 
   const deleteEventAndTask = (eventToDelete, taskIndex) => {
     if (eventToDelete) {
-      //removing event from eventsArr
-      setEventsArr((eventsArr) => eventsArr.filter((event) => event !== eventToDelete));
-
-      // finding corresponding task in tasks and removing it
-      const taskToDelete = eventToDelete.events[0].title;
-      setTasks((tasks) => tasks.filter((task) => task !== taskToDelete));
+      // Remove event from state
+      setEventsArr((prevEvents) =>
+        prevEvents.filter(
+          (event) =>
+            !(
+              event.EventName === eventToDelete.EventName &&
+              event.Day === eventToDelete.Day &&
+              event.Month === eventToDelete.Month &&
+              event.Year === eventToDelete.Year &&
+              event.TimeFrom === eventToDelete.TimeFrom &&
+              event.TimeTo === eventToDelete.TimeTo
+            )
+        )
+      );
+  
+      // Remove matching task (by title)
+      const taskToDelete = eventToDelete.EventName;
+      setTasks((prevTasks) => prevTasks.filter((task) => task !== taskToDelete));
     } else {
-      // removing task from tasks
+      // Delete by index (task only)
       const taskToDelete = tasks[taskIndex];
-      setTasks((tasks) => tasks.filter((_, i) => i !== taskIndex));
-
-      // removing corresponding event from eventsArr
-      setEventsArr((eventsArr) => eventsArr.filter((event) => event.events[0].title !== taskToDelete));
+      setTasks((prevTasks) => prevTasks.filter((_, i) => i !== taskIndex));
+  
+      // Remove the event that matches the task name
+      setEventsArr((prevEvents) =>
+        prevEvents.filter((event) => event.EventName !== taskToDelete)
+      );
     }
   };
+  
 
   return (
     <div className="App">

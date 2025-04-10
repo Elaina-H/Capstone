@@ -172,14 +172,6 @@ const Calendar = ({ eventsArr, addEvent, deleteEventAndTask }) => {
 
 
     axios.post('http://127.0.0.1:8000/api/add_event/', newEvent, { 
-      //Test values
-      // day: 15,
-      // month: 4,
-      // year: 2025,
-      // title: 'Sample Event',
-      // time_from: '10:00',
-      // time_to: '12:00'
-    }, {
       headers: {
         'X-CSRFToken': csrfToken, // Add a method to retrieve the token
         'Content-Type': 'application/json',
@@ -215,7 +207,7 @@ const Calendar = ({ eventsArr, addEvent, deleteEventAndTask }) => {
 	  const lastDate = new Date(today.setDate(lastDayOfWeek));
 
 	  return eventsArr.filter(event => {
-		const eventDate = new Date(event.year, event.month - 1, event.day);
+		const eventDate = new Date(event.Year, event.Month - 1, event.Day);
 		return eventDate >= firstDate && eventDate <= lastDate;
 	  });
 	};
@@ -223,7 +215,7 @@ const Calendar = ({ eventsArr, addEvent, deleteEventAndTask }) => {
 	/* update to display events from database*/
   const getMonthEvents = () => {
     return eventsArr.filter(
-      (event) => event.month === month + 1 && event.year === year
+      (event) => event.Month === month + 1 && event.Year === year
     );
   };
   
@@ -287,7 +279,7 @@ const Calendar = ({ eventsArr, addEvent, deleteEventAndTask }) => {
             <button className="dropbtn">Upcoming Events This Month</button>
             <div className="dropdown-content">
               {getMonthEvents().map((event, index) => (
-                <div key={index}>{event.day} {months[event.month - 1]}: {event.events[0].title} ({event.events[0].time})</div>
+                <div key={index}>{event.Day} {months[event.Month - 1]}: {event.EventName} ({event.TimeFrom} - {event.TimeTo})</div>
               ))}
             </div>
 			
@@ -297,14 +289,14 @@ const Calendar = ({ eventsArr, addEvent, deleteEventAndTask }) => {
 
 {/* Display events for selected day*/}
         <div className="events">
-          {eventsArr.filter(event => event.day === activeDay && event.month === month + 1 && event.year === year).map((event, index) => (
+          {eventsArr.filter(event => event.Day === activeDay && event.Month === month + 1 && event.Year === year).map((event, index) => (
             <div key={index} className="event">
               <div className="title">
 			  <i className="fas fa-circle"></i>
-              <h3 className="event-title">{event.events[0].title}</h3>
+              <h3 className="event-title">{event.EventName}</h3>
               </div>
 			  <div className="event-time">
-				<span className="event-time">{event.events[0].time}</span>
+				<span className="event-time">{event.TimeFrom} - {event.TimeTo}</span>
 			  </div>
 				<button className="delete-event-btn" onClick={() => deleteEventAndTask(event, index)}>Delete</button>
 			  </div>
