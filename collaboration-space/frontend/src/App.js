@@ -35,11 +35,40 @@ function App() {
   };
 
   
-  const addEvent = (event) => {
-    const updatedEvents = [...eventsArr, event];
-    setEventsArr(updatedEvents);
-    localStorage.setItem("events", JSON.stringify(updatedEvents));
-    addTask(event.events[0].title);
+  const addEvent = async (event) => {
+    // const updatedEvents = [...eventsArr, event];
+    // setEventsArr(updatedEvents);
+    // localStorage.setItem("events", JSON.stringify(updatedEvents));
+    // addTask(event.events[0].title);
+    
+
+    try {
+      // Send the event to the backend to store it in the database
+      const response = await fetch('http://127.0.0.1:8000/api/fetch_events', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(event.eventName),
+      });
+  
+      if (!response.ok) {
+        throw new Error('Failed to save event to the database');
+      }
+  
+      const savedEvent = await response.json();
+  
+      // Update the local state with the newly saved event
+      const updatedEvents = [...eventsArr, savedEvent];
+      setEventsArr(updatedEvents);
+  
+      // Add the task based on the event title
+      addTask(savedEvent.title);
+      console.log("saved event: ", savedEvent.title);
+      localStorage.setItem("events", JSON.stringify(updatedEvents));
+    } catch (error) {
+      console.error('Error adding event:', error);
+    }
   };
 
 

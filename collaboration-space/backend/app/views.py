@@ -7,15 +7,6 @@ import json
 
 @csrf_exempt
 def add_event(request):
-    # return render(request, 'app/my_template.html')
-    # return JsonResponse({'message': 'This is the endpoint'})
-    # data = {request.body}
-    # return JsonResponse(data, safe=False)
-    # return JsonResponse({'Request body: ', request.body})
-
-    # Query the Event table
-    # events = Event.objects.all()
-    # print(events)
 
     # # Or create a new event
     # new_event = Event.objects.create(
@@ -30,32 +21,29 @@ def add_event(request):
 
     if request.method == "POST":      
         try:
-            # Check to see if data is retrieved
+            data = json.loads(request.body) # Parse the event data from the request
+            # Check to see if data is retrieved in terminal
             print("Received data: ", request.body)
+            print("Title: ", data.get('EventName'))
 
-            # Parse the event data from the request
-            data = json.loads(request.body)
-        #     return JsonResponse({'data: ', data})
-
-        # except json.JSONDecodeError:
-        #     return JsonResponse({'error': 'Invalid JSON format'}, status=400)
-
-            # day = data.get("Day")
-            # month = data.get("Month")
-            # year = data.get("Year")
-            # title = data.get("EventName")
-            # time_from = data.get("TimeFrom")
-            # time_to = data.get("TimeTo")   
+            # create variables corresponding to body
+            day = data.get('Day')
+            month = data.get('Month')
+            year = data.get('Year')
+            title = data.get('EventName')
+            time_from = data.get('TimeFrom')
+            time_to = data.get('TimeTo')   
+            # print(day, month, year, title, time_from, time_to)
             
-            # # Save to the database
-            # event = Event.objects.create(
-            #     Day=day,
-            #     Month=month,
-            #     Year=year,
-            #     EventName = event_name,
-            #     TimeFrom=time_from,
-            #     TimeTo=time_to,
-            # )
+            # Save to the database
+            event = Event.objects.create(
+                Day=day,
+                Month=month,
+                Year=year,
+                EventName = title,
+                TimeFrom=time_from,
+                TimeTo=time_to,
+            )
 
             # if not all([day, month, year, title, time_from, time_to]):
             #     return JsonResponse({'error': 'Missing required fields'}, status=400)
@@ -80,6 +68,6 @@ def fetch_events(request):
     if request.method == "GET":
         month = request.GET.get("month")
         year = request.GET.get("year")
-        event = Event.objects.filter(month=month, year=year).values()
+        event = Event.objects.filter(Month=month, Year=year).values()
         return JsonResponse(list(event), safe=False)
 
