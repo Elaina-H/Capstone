@@ -54,7 +54,7 @@ CSRF_HEADER_NAME = 'X-CSRFToken'
 CSRF_COOKIE_HTTPONLY = False 
 
 CSRF_TRUSTED_ORIGINS = [
-    'http://localhost:3000',  # Your React app's URL
+    'http://localhost:3000/',  # Your React app's URL
 ]
 
 MIDDLEWARE = [

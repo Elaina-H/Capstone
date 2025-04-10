@@ -145,15 +145,16 @@ const Calendar = ({ eventsArr, addEvent, deleteEventAndTask }) => {
   /* update with adding dates to database*/
  
   const addNewEvent = async () => {
+    console.log("Event Date: ", eventDate);
     const [year, month, day] = eventDate.split("-").map(Number);
     
 	  const newEvent = {
-	    day: day,
-      month: month,
-      year: year,
-      title: eventName,
-      time_from: eventTimeFrom,
-      time_to: eventTimeTo,
+	    Day: day,
+      Month: month,
+      Year: year,
+      EventName: eventName,
+      TimeFrom: eventTimeFrom,
+      TimeTo: eventTimeTo,
       // events: [{ title: eventName, time: `${eventTimeFrom} - ${eventTimeTo}` }],
     };
     console.log("Year:", year);  
@@ -161,6 +162,7 @@ const Calendar = ({ eventsArr, addEvent, deleteEventAndTask }) => {
     console.log("Day:", day);
     console.log("Title:", eventName);
     console.log("Time:", eventTimeFrom, " ", eventTimeTo);
+    console.log("New Event: ", newEvent);
 
     // console.log('Event data:', newEvent);
 
@@ -171,12 +173,12 @@ const Calendar = ({ eventsArr, addEvent, deleteEventAndTask }) => {
 
     axios.post('http://127.0.0.1:8000/api/add_event/', newEvent, { 
       //Test values
-      day: 15,
-      month: 4,
-      year: 2025,
-      title: 'Sample Event',
-      time_from: '10:00',
-      time_to: '12:00'
+      // day: 15,
+      // month: 4,
+      // year: 2025,
+      // title: 'Sample Event',
+      // time_from: '10:00',
+      // time_to: '12:00'
     }, {
       headers: {
         'X-CSRFToken': csrfToken, // Add a method to retrieve the token
@@ -201,7 +203,6 @@ const Calendar = ({ eventsArr, addEvent, deleteEventAndTask }) => {
     localStorage.setItem("events", JSON.stringify(updatedEvents));*/
     
   };
-
 
   
 	/* update to display events from database*/
