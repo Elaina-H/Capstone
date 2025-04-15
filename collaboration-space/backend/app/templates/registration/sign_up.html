@@ -1,0 +1,30 @@
+{% extends 'main/base.html' %} {% block title %}Sign Up{% endblock %}
+{% load crispy_forms_tags %} {% block content %}
+<form method="post">
+{% csrf_token %}{{form|crispy}}
+<p>Have an account? Login <a href="/login">Here</a>!</p>
+<button type="submit" class="btn btn-success login-btn">Register</button>
+</form>
+{% endblock %}
+
+{% block extra_styles %}
+<style>
+    .navbar {
+        background-color: #b19cd9 !important;
+    }
+    .nav-link, .navbar-text {
+        color: #000000 !important;
+    }
+    .nav-link:hover {
+        color: #333333 !important;
+    }
+    .login-btn {
+        background-color: #4c2a56 !important;
+        border-color: #4c2a56 !important;
+    }
+    .login-btn:hover {
+        background-color: #3a2043 !important; /* Slightly darker shade for hover effect */
+        border-color: #3a2043 !important;
+    }
+</style>
+{% endblock %}
