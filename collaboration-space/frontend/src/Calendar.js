@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import './Calendar.css'; 
+import './Calendar.css';
 
 /*
 To fix with DB Update:
@@ -8,7 +8,7 @@ addEvent()
 getWeekEvents()
 getMonthEvents()
 return ( 
-	display events for selected day
+  display events for selected day
 )
 
 Bugs:
@@ -16,7 +16,7 @@ Bugs:
 */
 
 
-const Calendar = ({ eventsArr, addEvent, deleteEventAndTask }) => {
+const Calendar = ({ eventsArr, addEvent, deleteEventAndTask, activeDay, setActiveDay, month, setMonth, year, setYear }) => {
   const months = [
     "January",
     "February",
@@ -31,14 +31,16 @@ const Calendar = ({ eventsArr, addEvent, deleteEventAndTask }) => {
     "November",
     "December",
   ];
-  
-	
-  const [activeDay, setActiveDay] = useState(new Date().getDate());
-  const [month, setMonth] = useState(new Date().getMonth());
-  const [year, setYear] = useState(new Date().getFullYear());
+
+
+  //moved to app.js
+  //const [activeDay, setActiveDay] = useState(new Date().getDate());
+  //const [month, setMonth] = useState(new Date().getMonth());
+  //const [year, setYear] = useState(new Date().getFullYear());
+
   const [days, setDays] = useState([]);
   /* FIXME will need to change to database somehow */
-  
+
   const [showEventForm, setShowEventForm] = useState(false);
   const [eventName, setEventName] = useState("");
   const [eventTimeFrom, setEventTimeFrom] = useState("");
@@ -46,8 +48,8 @@ const Calendar = ({ eventsArr, addEvent, deleteEventAndTask }) => {
   const [currentTime, setCurrentTime] = useState("");
 
   const [eventDate, setEventDate] = useState("");
-  
-  
+
+
 
 
   /* Update the time every second */
@@ -111,7 +113,7 @@ const Calendar = ({ eventsArr, addEvent, deleteEventAndTask }) => {
     setDays(daysArr);
   };
 
-/* allows Calendar to display past month on button press */
+  /* allows Calendar to display past month on button press */
   const prevMonth = () => {
     const newDate = new Date(year, month, 1);
     newDate.setMonth(newDate.getMonth() - 1);
@@ -120,7 +122,7 @@ const Calendar = ({ eventsArr, addEvent, deleteEventAndTask }) => {
     setActiveDay(newDate.getDate());
   };
 
-/* allows Calendar to display next month on button press */
+  /* allows Calendar to display next month on button press */
   const nextMonth = () => {
     const newDate = new Date(year, month, 1);
     newDate.setMonth(newDate.getMonth() + 1);
@@ -130,14 +132,14 @@ const Calendar = ({ eventsArr, addEvent, deleteEventAndTask }) => {
   };
 
 
-  
+
   /* update with adding dates to database*/
- 
+
   const addNewEvent = () => {
 
     const [year, month, day] = eventDate.split("-").map(Number);
-	const newEvent = {
-	  day: day,
+    const newEvent = {
+      day: day,
       month: month,
       year: year,
       events: [{ title: eventName, time: `${eventTimeFrom} - ${eventTimeTo}` }],
@@ -153,36 +155,36 @@ const Calendar = ({ eventsArr, addEvent, deleteEventAndTask }) => {
     setEventTimeFrom("");
     setEventTimeTo("");
 
-	setEventDate("");
-	
+    setEventDate("");
+
     setShowEventForm(false);
   };
 
 
-  
-	/* update to display events from database*/
+
+  /* update to display events from database*/
   const getWeekEvents = () => {
-	  const today = new Date();
-	  const firstDayOfWeek = today.getDate() - today.getDay(); // Start of week
-	  const lastDayOfWeek = firstDayOfWeek + 6; // End of week
+    const today = new Date();
+    const firstDayOfWeek = today.getDate() - today.getDay(); // Start of week
+    const lastDayOfWeek = firstDayOfWeek + 6; // End of week
 
-	  const firstDate = new Date(today.setDate(firstDayOfWeek));
-	  const lastDate = new Date(today.setDate(lastDayOfWeek));
+    const firstDate = new Date(today.setDate(firstDayOfWeek));
+    const lastDate = new Date(today.setDate(lastDayOfWeek));
 
-	  return eventsArr.filter(event => {
-		const eventDate = new Date(event.year, event.month - 1, event.day);
-		return eventDate >= firstDate && eventDate <= lastDate;
-	  });
-	};
+    return eventsArr.filter(event => {
+      const eventDate = new Date(event.year, event.month - 1, event.day);
+      return eventDate >= firstDate && eventDate <= lastDate;
+    });
+  };
 
-	/* update to display events from database*/
+  /* update to display events from database*/
   const getMonthEvents = () => {
     return eventsArr.filter(
       (event) => event.month === month + 1 && event.year === year
     );
   };
-  
-/* below is actual Display */
+
+  /* below is actual Display */
   return (
     <div className="container">
       {/* Left Panel (Calendar) */}
@@ -208,12 +210,12 @@ const Calendar = ({ eventsArr, addEvent, deleteEventAndTask }) => {
           <div className="days">
             {days}
           </div>
-		  {/* FIX: should scroll to element instead of to pixel */}
-		  <button className = "scr-todo" onClick={() => window.scrollTo({ top: 600, behavior: 'smooth' })}> Scroll to your ToDo list</button>
-		  <button className = "scr-library" onClick={() => window.scrollTo({ top: 1270, behavior: 'smooth' })}> Scroll to view Library rooms</button>
+          {/* FIX: should scroll to element instead of to pixel */}
+          <button className="scr-todo" onClick={() => window.scrollTo({ top: 600, behavior: 'smooth' })}> Scroll to your ToDo list</button>
+          <button className="scr-library" onClick={() => window.scrollTo({ top: 1270, behavior: 'smooth' })}> Scroll to view Library rooms</button>
         </div>
       </div>
-	  
+
 
       {/* Right Panel (Event Details) */}
       <div className="event-details">
@@ -223,21 +225,21 @@ const Calendar = ({ eventsArr, addEvent, deleteEventAndTask }) => {
 
         </div>
         <div id="current-time">Current Time: <span>{currentTime}</span></div>
-		{/* FIXME Display this week's events */}
+        {/* FIXME Display this week's events */}
         <div className="event-dropdowns">
           <div className="dropdown">
             <button className="dropbtn">Upcoming Events This Week</button>
             <div className="dropdown-content">
               if (getWeekEvents().length != 0)  {
-				<div>events this week</div>
-			} else {
-				<div>No events this week</div>
-			}
-			
-		   </div>
-		  </div>
-		  
-		  {/* FIXME Display this month's events */}
+                <div>events this week</div>
+              } else {
+                <div>No events this week</div>
+              }
+
+            </div>
+          </div>
+
+          {/* FIXME Display this month's events */}
           <div className="dropdown">
             <button className="dropbtn">Upcoming Events This Month</button>
             <div className="dropdown-content">
@@ -245,24 +247,24 @@ const Calendar = ({ eventsArr, addEvent, deleteEventAndTask }) => {
                 <div key={index}>{event.day} {months[event.month - 1]}: {event.events[0].title} ({event.events[0].time})</div>
               ))}
             </div>
-			
+
           </div>
         </div>
-        
 
-{/* Display events for selected day*/}
+
+        {/* Display events for selected day*/}
         <div className="events">
           {eventsArr.filter(event => event.day === activeDay && event.month === month + 1 && event.year === year).map((event, index) => (
             <div key={index} className="event">
               <div className="title">
-			  <i className="fas fa-circle"></i>
-              <h3 className="event-title">{event.events[0].title}</h3>
+                <i className="fas fa-circle"></i>
+                <h3 className="event-title">{event.events[0].title}</h3>
               </div>
-			  <div className="event-time">
-				<span className="event-time">{event.events[0].time}</span>
-			  </div>
-				<button className="delete-event-btn" onClick={() => deleteEventAndTask(event, index)}>Delete</button>
-			  </div>
+              <div className="event-time">
+                <span className="event-time">{event.events[0].time}</span>
+              </div>
+              <button className="delete-event-btn" onClick={() => deleteEventAndTask(event, index)}>Delete</button>
+            </div>
           ))}
         </div>
 
@@ -277,7 +279,7 @@ const Calendar = ({ eventsArr, addEvent, deleteEventAndTask }) => {
               <input type="text" placeholder="Event Name" value={eventName} onChange={(e) => setEventName(e.target.value)} />
               <input type="time" placeholder="Event Time From" value={eventTimeFrom} onChange={(e) => setEventTimeFrom(e.target.value)} />
               <input type="time" placeholder="Event Time To" value={eventTimeTo} onChange={(e) => setEventTimeTo(e.target.value)} />
-			  <input type="date" placeholder="Event Date" value={eventDate} onChange={(e) => setEventDate(e.target.value)} />
+              <input type="date" placeholder="Event Date" value={eventDate} onChange={(e) => setEventDate(e.target.value)} />
             </div>
             <div className="add-event-footer">
               <button className="add-event-btn" onClick={addNewEvent}>Add Event</button>

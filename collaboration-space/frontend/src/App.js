@@ -6,10 +6,14 @@ import Studyroom from './Studyroom';
 
 function App() {
 
+  const [activeDay, setActiveDay] = useState(new Date().getDate());
+  const [month, setMonth] = useState(new Date().getMonth());
+  const [year, setYear] = useState(new Date().getFullYear());
+
   // defining state variable "tasks" and using lazy initalization
   const [tasks, setTasks] = useState(() => {
     const savedTasks = JSON.parse(localStorage.getItem("tasks"));
-    return savedTasks || [];  
+    return savedTasks || [];
   });
 
   // defining state variable "eventsArr" and using lazy initalization
@@ -34,7 +38,7 @@ function App() {
     localStorage.setItem("tasks", JSON.stringify(updatedTasks));
   };
 
-  
+
   const addEvent = (event) => {
     const updatedEvents = [...eventsArr, event];
     setEventsArr(updatedEvents);
@@ -65,11 +69,12 @@ function App() {
     <div className="App">
       <header className="App-header">
       </header>
-	  <main>
-		<Calendar eventsArr={eventsArr} addEvent={addEvent} deleteEventAndTask={deleteEventAndTask}/>
-		<Todo tasks={tasks} addTask={addTask} deleteEventAndTask={deleteEventAndTask}/>
-		<Studyroom />
-	  </main>	
+      <main>
+        <Calendar eventsArr={eventsArr} addEvent={addEvent} deleteEventAndTask={deleteEventAndTask} activeDay={activeDay} setActiveDay={setActiveDay} month={month} setMonth={setMonth}
+          year={year} setYear={setYear} />
+        <Todo tasks={tasks} addTask={addTask} deleteEventAndTask={deleteEventAndTask} />
+        <Studyroom activeDay={activeDay} setActiveDay={setActiveDay} month={month} setMonth={setMonth} year={year} setYear={setYear} />
+      </main>
     </div>
   );
 }
