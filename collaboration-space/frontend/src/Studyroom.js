@@ -34,6 +34,7 @@ const Studyroom = ({ activeDay, setActiveDay, month, setMonth, year, setYear }) 
 		setCapacity(e.target.value);
 	};
 
+	const [imageKey, setImageKey] = useState(Date.now());
 	// Use Effect to trigger Puppeteer request
 	useEffect(() => {
 		if (activeDay && capacity) {
@@ -44,7 +45,7 @@ const Studyroom = ({ activeDay, setActiveDay, month, setMonth, year, setYear }) 
 					const response = await fetch(`http://localhost:5000/scrape?date=${formattedDate}&capacity=${capacity}`);
 					const data = await response.json();
 					console.log("Scraped data:", data);
-					// Do something with the data (display it in the UI, etc.)
+					setImageKey(Date.now());
 				} catch (error) {
 					console.error("Error fetching data:", error);
 				}
@@ -87,7 +88,13 @@ const Studyroom = ({ activeDay, setActiveDay, month, setMonth, year, setYear }) 
 					</div>
 				</div>
 				<div className="image-container">
-					<img src="http://localhost:5000/static/roomList.png" alt="Room List" className="room-list-image" />
+					<img
+						key={imageKey}
+						src={`http://localhost:5000/static/roomList.png?key=${imageKey}`}
+						alt="Room List"
+						className="room-list-image"
+					/>
+
 				</div>
 			</div>
 		</div >

@@ -7,10 +7,16 @@ const PORT = 5000;
 const path = require('path');
 
 app.use(cors());
+app.use('/static', express.static(path.join(__dirname)));
 
-app.use('/static', express.static(path.join(__dirname, 'backend')));
+let browser = null;
+let page = null;
 
-let browser = null; // Store the Puppeteer browser instance
+app.use('/static', express.static(path.join(__dirname), {
+    setHeaders: (res, path) => {
+        res.set('Cache-Control', 'no-store');
+    }
+}));
 
 app.get('/scrape', async (req, res) => {
     const formattedDate = req.query.date;
@@ -21,15 +27,11 @@ app.get('/scrape', async (req, res) => {
     }
 
     try {
-        // If a browser is already open, close it
-        if (browser) {
-            await browser.close();
-            console.log("Previous browser closed");
+        if (!browser) {
+            // Change headless to 'true' to make the chrome window visible
+            browser = await puppeteer.launch({ headless: false });
+            page = await browser.newPage();
         }
-
-        // Launch a new browser instance
-        browser = await puppeteer.launch({ headless: true });
-        const page = await browser.newPage();
 
         await page.goto("https://spaces.library.okstate.edu/");
 
@@ -43,7 +45,6 @@ app.get('/scrape', async (req, res) => {
         await page.select('#seatsDropDown', capacity);
 
         await page.waitForSelector('.large-12.cell.grid-x');
-
 
         const roomList = await page.$('.large-12.cell.grid-x');
 
