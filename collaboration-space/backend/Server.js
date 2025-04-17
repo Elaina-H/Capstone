@@ -28,8 +28,8 @@ app.get('/scrape', async (req, res) => {
 
     try {
         if (!browser) {
-            // Change headless to 'true' to make the chrome window visible
-            browser = await puppeteer.launch({ headless: false });
+            // Change headless to 'fale' to make the chrome window visible
+            browser = await puppeteer.launch({ headless: true });
             page = await browser.newPage();
         }
 
