@@ -3,6 +3,8 @@ import React, { useState, useEffect } from 'react';
 import Calendar from './Calendar';
 import Todo from './Todo';
 import Studyroom from './Studyroom';
+import axios from 'axios';
+
 
 function App() {
 
@@ -41,88 +43,62 @@ function App() {
     localStorage.setItem("events", JSON.stringify(updatedEvents));
     addTask(event.EventName);
     // addTask(event.events[0].title);
-    
-
-    // try {
-    //   // Send the event to the backend to store it in the database
-    //   const response = await fetch('http://127.0.0.1:8000/api/add_event/', {
-    //     method: 'POST',
-    //     headers: {
-    //       'Content-Type': 'application/json',
-    //     },
-    //     body: JSON.stringify(event.eventName),
-    //   });
-  
-    //   if (!response.ok) {
-    //     throw new Error('Failed to save event to the database');
-    //   }
-  
-    //   const savedEvent = await response.json();
-  
-    //   // Update the local state with the newly saved event
-    //   const updatedEvents = [...eventsArr, savedEvent];
-    //   setEventsArr(updatedEvents);
-  
-    //   // Add the task based on the event title
-    //   addTask(savedEvent.title);
-    //   console.log("saved event: ", savedEvent.title);
-    //   localStorage.setItem("events", JSON.stringify(updatedEvents));
-    // } catch (error) {
-    //   console.error('Error adding event:', error);
-    // }
   };
 
+  // Deletes an event from the backend
+  const deleteEventfromBackend = async (eventID) => {
+    console.log("Calling backend delete for eventId:", eventID);
+    try {
+      const response = await fetch(`http://127.0.0.1:8000/api/delete_event/${eventID}/`, {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
 
-  // const deleteEventAndTask = (eventToDelete, taskIndex) => {
-  //   if (eventToDelete) {
-  //     //removing event from eventsArr
-  //     setEventsArr((eventsArr) => eventsArr.filter((event) => event !== eventToDelete));
+      if (!response.ok) {
+        throw new Error('event_id not found');
+      }
+  
+      const data = await response.json();
+      console.log(data.message);
+      return data;
 
-  //     // finding corresponding task in tasks and removing it
-  //     const taskToDelete = eventToDelete.events[0].title;
-  //     setTasks((tasks) => tasks.filter((task) => task !== taskToDelete));
-  //   } else {
-  //     // removing task from tasks
-  //     const taskToDelete = tasks[taskIndex];
-  //     setTasks((tasks) => tasks.filter((_, i) => i !== taskIndex));
+    }catch (error) {
+      console.error("Delete error:", error);
+      throw error;
+    }
+  };
 
-  //     // removing corresponding event from eventsArr
-  //     setEventsArr((eventsArr) => eventsArr.filter((event) => event.events[0].title !== taskToDelete));
-  //   }
-  // };
+  const deleteEventAndTask = async (eventToDelete, taskIndex) => {
 
-  const deleteEventAndTask = (eventToDelete, taskIndex) => {
-    if (eventToDelete) {
+    console.log("eventToDelete:", eventToDelete);
+    console.log("event_id:", eventToDelete?.event_id);
+
+    if (eventToDelete?.event_id) {
+      // Refer to backend
+      await deleteEventfromBackend(eventToDelete.event_id);
+  
       // Remove event from state
       setEventsArr((prevEvents) =>
-        prevEvents.filter(
-          (event) =>
-            !(
-              event.EventName === eventToDelete.EventName &&
-              event.Day === eventToDelete.Day &&
-              event.Month === eventToDelete.Month &&
-              event.Year === eventToDelete.Year &&
-              event.TimeFrom === eventToDelete.TimeFrom &&
-              event.TimeTo === eventToDelete.TimeTo
-            )
-        )
+        prevEvents.filter((event) => event.event_id !== eventToDelete.event_id)
       );
   
       // Remove matching task (by title)
       const taskToDelete = eventToDelete.EventName;
       setTasks((prevTasks) => prevTasks.filter((task) => task !== taskToDelete));
     } else {
-      // Delete by index (task only)
+      // Delete task by index only (fallback)
+      
       const taskToDelete = tasks[taskIndex];
       setTasks((prevTasks) => prevTasks.filter((_, i) => i !== taskIndex));
-  
-      // Remove the event that matches the task name
+      
+      // Remove event with matching title
       setEventsArr((prevEvents) =>
         prevEvents.filter((event) => event.EventName !== taskToDelete)
       );
     }
   };
-  
 
   return (
     <div className="App">
@@ -135,6 +111,7 @@ function App() {
 	  </main>	
     </div>
   );
+  
 }
 
 export default App;

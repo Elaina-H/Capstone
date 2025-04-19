@@ -11,3 +11,4 @@ class Event(models.Model):
 
     class Meta:
         db_table = 'app_events'
+

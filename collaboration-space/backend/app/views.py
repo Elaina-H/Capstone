@@ -11,9 +11,6 @@ def add_event(request):
     if request.method == "POST":      
         try:
             data = json.loads(request.body) # Parse the event data from the request
-            # Check to see if data is retrieved in terminal
-            # print("Received data: ", request.body)
-            # print("Title: ", data.get('EventName'))
 
             # create variables corresponding to body
             day = data.get('Day')
@@ -22,7 +19,6 @@ def add_event(request):
             title = data.get('EventName')
             time_from = data.get('TimeFrom')
             time_to = data.get('TimeTo')   
-            # print(day, month, year, title, time_from, time_to)    # test accuracy
             
             # Save to the database
             event = Event.objects.create(
@@ -34,11 +30,15 @@ def add_event(request):
                 TimeTo=time_to,
             )
 
+            print("Created event:", event)
+            print("Returning event_id:", event.event_id)
+
             # if not all([day, month, year, title, time_from, time_to]):
             #     return JsonResponse({'error': 'Missing required fields'}, status=400)
 
             # return JsonResponse({"message": "Event has been added successfully!"}, status=201)
-            return JsonResponse({"message": "Event added successfully!", "event": {
+            return JsonResponse({"message": "Event added successfully!", 
+            "event": {
                 "id": event.event_id,  # Primary key (EventCode)
                 "day": event.Day,
                 "month": event.Month,
@@ -57,4 +57,23 @@ def fetch_events(request):
         year = request.GET.get("year")
         event = Event.objects.filter(Month=month, Year=year).values()
         return JsonResponse(list(event), safe=False)
+
+@csrf_exempt
+def delete_event(request, event_id):
+    if request.method == "DELETE":
+        try :
+            # data = json.loads(request.body)
+            # event_id = data.get(id = event_id)
+            
+            event_to_delete = Event.objects.get(event_id = event_id)
+            event_to_delete.delete()
+            # print(f"DELETE called for event_id: {event_id}")
+            
+            return JsonResponse({'message': 'Event deleted successfully'}, status=200)
+        except Exception as e:
+            return JsonResponse({'message': 'Delete unsuccessful or event not found'}, status=404)
+    return JsonResponse({'error: invalid request method.'}, status=405)
+
+
+
 

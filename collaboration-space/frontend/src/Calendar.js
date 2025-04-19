@@ -143,58 +143,130 @@ const Calendar = ({ eventsArr, addEvent, deleteEventAndTask }) => {
   };
 
   /* update with adding dates to database*/
- 
+
   const addNewEvent = async () => {
     console.log("Event Date: ", eventDate);
     const [year, month, day] = eventDate.split("-").map(Number);
-    
-	  const newEvent = {
-	    Day: day,
-      Month: month,
-      Year: year,
-      EventName: eventName,
-      TimeFrom: eventTimeFrom,
-      TimeTo: eventTimeTo,
-      // events: [{ title: eventName, time: `${eventTimeFrom} - ${eventTimeTo}` }],
-    };
-    console.log("Year:", year);  
-    console.log("Month:", month); 
-    console.log("Day:", day);
-    console.log("Title:", eventName);
-    console.log("Time:", eventTimeFrom, " ", eventTimeTo);
-    console.log("New Event: ", newEvent);
-
-    // console.log('Event data:', newEvent);
-
-    // await Event.create(new Event);
-    // const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
     const csrfToken = Cookies.get('csrftoken');
 
 
-    axios.post('http://127.0.0.1:8000/api/add_event/', newEvent, { 
-      headers: {
-        'X-CSRFToken': csrfToken, // Add a method to retrieve the token
-        'Content-Type': 'application/json',
-      }
-    })
-      .then(response => {
-        console.log("Event added: ", response.data);
-        addEvent(newEvent);
-        setEventName("");
-        setEventTimeFrom("");
-        setEventTimeTo("");
-        setEventDate("");
-        setShowEventForm(false);
-      })
-      .catch(error => {
-        console.error("Error adding an event: ", error);
-        alert("Error adding event.");
+    try {
+      const response = await axios.post('http://127.0.0.1:8000/api/add_event/', { 
+        Day: day,
+        Month: month,
+        Year: year,
+        EventName: eventName,
+        TimeFrom: eventTimeFrom,
+        TimeTo: eventTimeTo,
+      }, {
+        headers: {
+          'X-CSRFToken': csrfToken, // Add a method to retrieve the token
+          'Content-Type': 'application/json',
+        }
       });
+
+      console.log("Full backend response:", response.data);
+  
+      const backendEvent = response.data.event;
+      const eventID = backendEvent.id;
+      console.log("Event ID:", eventID);
+
+      
+      const newEvent = {
+        Day: day,
+        Month: month,
+        Year: year,
+        EventName: eventName,
+        TimeFrom: eventTimeFrom,
+        TimeTo: eventTimeTo,
+        event_id: eventID,
+        // events: [{ title: eventName, time: `${eventTimeFrom} - ${eventTimeTo}` }],
+      };
+
+      addEvent(newEvent);
+      setEventName("");
+      setEventTimeFrom("");
+      setEventTimeTo("");        
+      setEventDate("");
+      setShowEventForm(false);
+
+      console.log("Year:", year);  
+      console.log("Month:", month); 
+      console.log("Day:", day);
+      console.log("Title:", eventName);
+      console.log("Time:", eventTimeFrom, " ", eventTimeTo);
+      console.log("New Event: ", newEvent);
+    } catch (error) {
+      console.error("Error adding event: ", error);
+      alert("Error adding event.");
+    }
+
+    
+
+
+    // await Event.create(new Event);
+    // const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+  
+    
     /*const updatedEvents = [...eventsArr, newEvent];
     setEventsArr(updatedEvents);
     localStorage.setItem("events", JSON.stringify(updatedEvents));*/
-    
   };
+ 
+  // const addNewEvent = async () => {
+  //   console.log("Event Date: ", eventDate);
+  //   const [year, month, day] = eventDate.split("-").map(Number);
+
+  //   const backendEvent = response.data.event;
+    
+	//   const newEvent = {
+	//     Day: day,
+  //     Month: month,
+  //     Year: year,
+  //     EventName: eventName,
+  //     TimeFrom: eventTimeFrom,
+  //     TimeTo: eventTimeTo,
+  //     event_id: backendEvent.id,
+  //     // events: [{ title: eventName, time: `${eventTimeFrom} - ${eventTimeTo}` }],
+  //   };
+  //   console.log("Year:", year);  
+  //   console.log("Month:", month); 
+  //   console.log("Day:", day);
+  //   console.log("Title:", eventName);
+  //   console.log("Time:", eventTimeFrom, " ", eventTimeTo);
+  //   console.log("New Event: ", newEvent);
+
+
+  //   // await Event.create(new Event);
+  //   // const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+  //   const csrfToken = Cookies.get('csrftoken');
+    
+
+
+  //   axios.post('http://127.0.0.1:8000/api/add_event/', newEvent, { 
+  //     headers: {
+  //       'X-CSRFToken': csrfToken, // Add a method to retrieve the token
+  //       'Content-Type': 'application/json',
+  //     }
+  //   })
+  //     .then(response => {
+  //       console.log("Event added: ", response.data);
+        
+  //       addEvent(newEvent);
+  //       setEventName("");
+  //       setEventTimeFrom("");
+  //       setEventTimeTo("");
+  //       setEventDate("");
+  //       setShowEventForm(false);
+  //     })
+  //     .catch(error => {
+  //       console.error("Error adding an event: ", error);
+  //       alert("Error adding event.");
+  //     });
+  //   /*const updatedEvents = [...eventsArr, newEvent];
+  //   setEventsArr(updatedEvents);
+  //   localStorage.setItem("events", JSON.stringify(updatedEvents));*/
+  // };
 
   
 	/* update to display events from database*/
