@@ -36,12 +36,13 @@ function App() {
     localStorage.setItem("tasks", JSON.stringify(updatedTasks));
   };
 
-  
   const addEvent = async (event) => {
     const updatedEvents = [...eventsArr, event];
     setEventsArr(updatedEvents);
     localStorage.setItem("events", JSON.stringify(updatedEvents));
+    // addTask(event.event_id);
     addTask(event.EventName);
+    
     // addTask(event.events[0].title);
   };
 
@@ -71,34 +72,119 @@ function App() {
   };
 
   const deleteEventAndTask = async (eventToDelete, taskIndex) => {
-
     console.log("eventToDelete:", eventToDelete);
     console.log("event_id:", eventToDelete?.event_id);
-
-    if (eventToDelete?.event_id) {
-      // Refer to backend
-      await deleteEventfromBackend(eventToDelete.event_id);
   
+    // Determine if we have an event_id
+    const eventId = eventToDelete?.event_id;
+  
+    // Delete from backend if event_id is available
+    if (eventId) {
+      // delete from backend
+      await deleteEventfromBackend(eventToDelete.event_id);
+    
       // Remove event from state
       setEventsArr((prevEvents) =>
         prevEvents.filter((event) => event.event_id !== eventToDelete.event_id)
       );
-  
+    
       // Remove matching task (by title)
       const taskToDelete = eventToDelete.EventName;
       setTasks((prevTasks) => prevTasks.filter((task) => task !== taskToDelete));
-    } else {
-      // Delete task by index only (fallback)
-      
+    }
+    // if no event_id is available (a task)
+    else {
+      // Get the task title from index
       const taskToDelete = tasks[taskIndex];
-      setTasks((prevTasks) => prevTasks.filter((_, i) => i !== taskIndex));
-      
-      // Remove event with matching title
-      setEventsArr((prevEvents) =>
-        prevEvents.filter((event) => event.EventName !== taskToDelete)
+      console.log("Task to delete (array position):", taskIndex, taskToDelete);
+    
+      // Try to find a matching event in eventsArr using EventName
+      const matchingEvent = eventsArr.find(event => event.EventName === taskToDelete);
+    
+      if (matchingEvent?.event_id) {
+        // Found a matching event with event_id — delete from backend and state
+        await deleteEventfromBackend(matchingEvent.event_id);
+    
+        // Remove from calendar state
+        setEventsArr(prevEvents =>
+          prevEvents.filter(event => event.event_id !== matchingEvent.event_id)
+        );
+      } 
+      else {
+        console.warn("No matching event found with EventName:", taskToDelete);
+    
+        // Fallback: Just remove from calendar state by EventName
+        setEventsArr(prevEvents =>
+          prevEvents.filter(event => event.EventName !== taskToDelete)
+        );
+      }
+    
+      // Remove from tasks state
+      setTasks(prevTasks =>
+        prevTasks.filter((_, i) => i !== taskIndex)
       );
     }
+    
+    // else {
+    //   // Remove from calendar state
+    //   setEventsArr((prevEvents) =>
+    //     prevEvents.filter((event) => event.event_id !== eventId)
+    //   );
+    
+    //   // Get task title
+    //   const taskToDelete = tasks[taskIndex];
+    //   // const taskToDelete = eventToDelete.EventName;
+    //   console.log("Task to delete (array position): ", taskIndex, taskToDelete);
+    //   // await deleteEventfromBackend(eventToDelete.event_id);
+
+    //   // Remove from task list
+    //   setTasks((prevTasks) =>
+    //     prevTasks.filter((task) => task !== taskToDelete)
+    //   );
+    // }
   };
+  
+
+  // const deleteEventAndTask = async (eventToDelete, taskIndex) => {
+
+  //   console.log("eventToDelete:", eventToDelete);
+  //   console.log("event_id:", eventToDelete?.event_id);
+
+    // if (eventToDelete?.event_id) {
+    //   // Refer to backend
+    //   // await deleteEventfromBackend(eventToDelete.event_id);
+  
+    //   // Remove event from state
+    //   setEventsArr((prevEvents) =>
+    //     prevEvents.filter((event) => event.event_id !== eventToDelete.event_id)
+    //   );
+  
+    //   // Remove matching task (by title)
+    //   const taskToDelete = eventToDelete.EventName;
+    //   const taskToDeleteIndex = eventToDelete.event_id;
+    //   // Remove matching task by index
+    //   setTasks((prevTasks) => prevTasks.filter((task) => task !== taskToDelete));
+
+  //     // if (eventToDelete) {
+  //     //   await deleteEventfromBackend(eventToDelete.event_id);
+  //     // }else {
+  //     //   await deleteEventfromBackend(eventToDelete.event_id);
+  //     // }
+
+  //   } else {
+  //     // Delete task by index only (fallback)
+  //     const taskToDelete = tasks[taskIndex];
+  //     console.log("Task to delete: ", taskIndex);
+  //     setTasks((prevTasks) => prevTasks.filter((_, i) => i !== taskIndex));
+      
+  //     // Remove event with matching title
+  //     setEventsArr((prevEvents) =>
+  //       prevEvents.filter((event) => event.EventName !== taskToDelete)
+  //     );
+  //   }
+  // };
+
+  // const deleteTask = async ()
 
   return (
     <div className="App">

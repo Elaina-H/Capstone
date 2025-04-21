@@ -360,6 +360,7 @@ const Calendar = ({ eventsArr, addEvent, deleteEventAndTask }) => {
         
 
 {/* Display events for selected day*/}
+        
         <div className="events">
           {eventsArr.filter(event => event.Day === activeDay && event.Month === month + 1 && event.Year === year).map((event, index) => (
             <div key={index} className="event">
