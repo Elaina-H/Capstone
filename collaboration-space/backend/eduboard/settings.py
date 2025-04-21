@@ -37,16 +37,34 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'app.apps.AppConfig',
+    'app',
+    # 'app.apps.AppConfig',
     'crispy_forms',
     'crispy_bootstrap5',
     'corsheaders',
+]
+
+# CORS_ALLOW_ALL_ORIGINS = True
+# CORS_ORIGIN_ALLOW_ALL = False
+# CORS_ORIGIN_WHITELIST = (
+#   'http://localhost:8000',
+# )
+CORS_ALLOWED_ORIGINS = [
+    'http://localhost:3000'
+]
+CSRF_COOKIE_NAME = 'csrftoken'
+CSRF_HEADER_NAME = 'X-CSRFToken'
+CSRF_COOKIE_HTTPONLY = False 
+
+CSRF_TRUSTED_ORIGINS = [
+    'http://localhost:3000/',  # React URL
 ]
 
 CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
 CRISPY_TEMPLATE_PACK = "bootstrap5"
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',    #Allow for website to have access to database
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -54,10 +72,10 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'corsheaders.middleware.CorsMiddleware',
+    
 ]
 
-ROOT_URLCONF = 'eduboard.urls'
+ROOT_URLCONF = 'app.urls'
 
 TEMPLATES = [
     {
@@ -101,6 +119,7 @@ DATABASES = {
         },
     }
 }
+
 
 
 # Password validation
