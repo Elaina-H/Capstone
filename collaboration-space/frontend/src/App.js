@@ -124,67 +124,7 @@ function App() {
         prevTasks.filter((_, i) => i !== taskIndex)
       );
     }
-    
-    // else {
-    //   // Remove from calendar state
-    //   setEventsArr((prevEvents) =>
-    //     prevEvents.filter((event) => event.event_id !== eventId)
-    //   );
-    
-    //   // Get task title
-    //   const taskToDelete = tasks[taskIndex];
-    //   // const taskToDelete = eventToDelete.EventName;
-    //   console.log("Task to delete (array position): ", taskIndex, taskToDelete);
-    //   // await deleteEventfromBackend(eventToDelete.event_id);
-
-    //   // Remove from task list
-    //   setTasks((prevTasks) =>
-    //     prevTasks.filter((task) => task !== taskToDelete)
-    //   );
-    // }
   };
-  
-
-  // const deleteEventAndTask = async (eventToDelete, taskIndex) => {
-
-  //   console.log("eventToDelete:", eventToDelete);
-  //   console.log("event_id:", eventToDelete?.event_id);
-
-    // if (eventToDelete?.event_id) {
-    //   // Refer to backend
-    //   // await deleteEventfromBackend(eventToDelete.event_id);
-  
-    //   // Remove event from state
-    //   setEventsArr((prevEvents) =>
-    //     prevEvents.filter((event) => event.event_id !== eventToDelete.event_id)
-    //   );
-  
-    //   // Remove matching task (by title)
-    //   const taskToDelete = eventToDelete.EventName;
-    //   const taskToDeleteIndex = eventToDelete.event_id;
-    //   // Remove matching task by index
-    //   setTasks((prevTasks) => prevTasks.filter((task) => task !== taskToDelete));
-
-  //     // if (eventToDelete) {
-  //     //   await deleteEventfromBackend(eventToDelete.event_id);
-  //     // }else {
-  //     //   await deleteEventfromBackend(eventToDelete.event_id);
-  //     // }
-
-  //   } else {
-  //     // Delete task by index only (fallback)
-  //     const taskToDelete = tasks[taskIndex];
-  //     console.log("Task to delete: ", taskIndex);
-  //     setTasks((prevTasks) => prevTasks.filter((_, i) => i !== taskIndex));
-      
-  //     // Remove event with matching title
-  //     setEventsArr((prevEvents) =>
-  //       prevEvents.filter((event) => event.EventName !== taskToDelete)
-  //     );
-  //   }
-  // };
-
-  // const deleteTask = async ()
 
   return (
     <div className="App">

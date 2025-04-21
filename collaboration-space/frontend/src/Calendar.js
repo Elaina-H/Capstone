@@ -180,7 +180,6 @@ const Calendar = ({ eventsArr, addEvent, deleteEventAndTask }) => {
         TimeFrom: eventTimeFrom,
         TimeTo: eventTimeTo,
         event_id: eventID,
-        // events: [{ title: eventName, time: `${eventTimeFrom} - ${eventTimeTo}` }],
       };
 
       addEvent(newEvent);
@@ -200,74 +199,7 @@ const Calendar = ({ eventsArr, addEvent, deleteEventAndTask }) => {
       console.error("Error adding event: ", error);
       alert("Error adding event.");
     }
-
-    
-
-
-    // await Event.create(new Event);
-    // const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
-  
-    
-    /*const updatedEvents = [...eventsArr, newEvent];
-    setEventsArr(updatedEvents);
-    localStorage.setItem("events", JSON.stringify(updatedEvents));*/
   };
- 
-  // const addNewEvent = async () => {
-  //   console.log("Event Date: ", eventDate);
-  //   const [year, month, day] = eventDate.split("-").map(Number);
-
-  //   const backendEvent = response.data.event;
-    
-	//   const newEvent = {
-	//     Day: day,
-  //     Month: month,
-  //     Year: year,
-  //     EventName: eventName,
-  //     TimeFrom: eventTimeFrom,
-  //     TimeTo: eventTimeTo,
-  //     event_id: backendEvent.id,
-  //     // events: [{ title: eventName, time: `${eventTimeFrom} - ${eventTimeTo}` }],
-  //   };
-  //   console.log("Year:", year);  
-  //   console.log("Month:", month); 
-  //   console.log("Day:", day);
-  //   console.log("Title:", eventName);
-  //   console.log("Time:", eventTimeFrom, " ", eventTimeTo);
-  //   console.log("New Event: ", newEvent);
-
-
-  //   // await Event.create(new Event);
-  //   // const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
-  //   const csrfToken = Cookies.get('csrftoken');
-    
-
-
-  //   axios.post('http://127.0.0.1:8000/api/add_event/', newEvent, { 
-  //     headers: {
-  //       'X-CSRFToken': csrfToken, // Add a method to retrieve the token
-  //       'Content-Type': 'application/json',
-  //     }
-  //   })
-  //     .then(response => {
-  //       console.log("Event added: ", response.data);
-        
-  //       addEvent(newEvent);
-  //       setEventName("");
-  //       setEventTimeFrom("");
-  //       setEventTimeTo("");
-  //       setEventDate("");
-  //       setShowEventForm(false);
-  //     })
-  //     .catch(error => {
-  //       console.error("Error adding an event: ", error);
-  //       alert("Error adding event.");
-  //     });
-  //   /*const updatedEvents = [...eventsArr, newEvent];
-  //   setEventsArr(updatedEvents);
-  //   localStorage.setItem("events", JSON.stringify(updatedEvents));*/
-  // };
-
   
 	/* update to display events from database*/
   const getWeekEvents = () => {
