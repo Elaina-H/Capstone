@@ -4,6 +4,7 @@ import Calendar from './Calendar';
 import Todo from './Todo';
 import Studyroom from './Studyroom';
 import axios from 'axios';
+import Cookies from 'js-cookie';
 
 
 function App() {
@@ -20,6 +21,11 @@ function App() {
     return savedEvents || [];
   });
 
+  // use to update header with room code
+  const [roomCode, setRoomCode] = useState("");
+  const [roomURL, setRoomURL] = useState("");
+  
+
   // saving task strings to local storage, updating when "tasks" changes
   useEffect(() => {
     localStorage.setItem("tasks", JSON.stringify(tasks));
@@ -29,6 +35,32 @@ function App() {
   useEffect(() => {
     localStorage.setItem("events", JSON.stringify(eventsArr));
   }, [eventsArr]);
+
+    // TEST    
+    useEffect(() => {
+      const params = new URLSearchParams(window.location.search);
+      const userIDFromUrl = params.get('RoomCode');
+      if (userIDFromUrl) {
+        setRoomCode(userIDFromUrl);
+        fetchEventsForUser(userIDFromUrl); // Fetch events for the user if userID exists
+      }
+    }, []);
+  
+    // Fetch events from backend based on userID
+    const fetchEventsForUser = async (RoomCode) => {
+      try {
+        const response = await axios.get(`http://127.0.0.1:8000/api/fetch_events/${RoomCode}/`);
+        const userEvents = response.data; // Assuming this returns the user's events
+        setEventsArr(userEvents);
+        localStorage.setItem("events", JSON.stringify(userEvents));
+      } catch (error) {
+        console.error("Error fetching events:", error);
+      }
+    };
+    // END TEST
+
+
+
 
   const addTask = (task) => {
     const updatedTasks = [...tasks, task];
@@ -125,11 +157,68 @@ function App() {
       );
     }
   };
+  
+  const addRoom = (newRoom) => {
+    setRoomCode(newRoom.RoomCode);
+    setRoomURL(newRoom.RoomURL);
+  };
+
+  const generateRoomCode = () => {
+		const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+		let code = "";
+		for (let i = 0; i < 6; i++) {
+			code += chars.charAt(Math.floor(Math.random() * chars.length));
+		}
+		return code;
+	};
+  
+  const createRoom = async () => {
+	  const code = generateRoomCode();
+	  const url = `https://groupwork.live/?roomCode=${code}/`;
+	  
+	  const newRoom = {
+	    RoomCode: code,
+	    RoomURL: url,
+	  }
+
+	  /* const csrfToken = Cookies.get('csrftoken'); */
+	  
+	  axios.post('http://127.0.0.1:8000/api/add_room/', newRoom, {
+		headers: {
+		"X-CSRFToken": Cookies.get("csrftoken"), 
+		"Content-Type": "application/json",
+		},
+		
+		withCredentials: true, 
+	  })
+      .then(response => {
+        console.log("Room added: ", response.data);
+        addRoom(newRoom);
+      })
+      .catch(error => {
+        console.error("Error adding a room: ", error);
+        alert("Error adding room.");
+      });
+    /*const updatedEvents = [...eventsArr, newEvent];
+    setEventsArr(updatedEvents);
+    localStorage.setItem("events", JSON.stringify(updatedEvents));*/
+    
+  };
+
 
   return (
     <div className="App">
       <header className="App-header">
-      </header>
+        <h1>Welcome User!</h1>
+          {roomCode && (
+          <div>
+          <p><strong>Room Code:</strong> {roomCode}</p>
+          <p><a href={roomURL} target="_blank" rel="noopener noreferrer">{roomURL}</a></p>
+          </div>
+          )}
+		<button className="create-room" onClick={createRoom}>Create Room</button>
+	  </header>
+
 	  <main>
 		<Calendar eventsArr={eventsArr} addEvent={addEvent} deleteEventAndTask={deleteEventAndTask}/>
 		<Todo tasks={tasks} addTask={addTask} deleteEventAndTask={deleteEventAndTask}/>
