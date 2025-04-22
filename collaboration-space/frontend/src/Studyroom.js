@@ -15,6 +15,7 @@ const Studyroom = () => {
 	return (
 		<div className="outer">
 		   <div className="main">
+		   <button className = "scr-up" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}> Scroll to Top</button>
 		   </div>
 		</div>
    );

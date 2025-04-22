@@ -38,6 +38,7 @@ const Todo = ({ tasks, addTask, deleteEventAndTask }) => {
         </ul>
       </div>
       <div className="right">
+	  <button className = "scr-up" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}> Scroll to Top</button>
         {/* Additional content can go here */}
       </div>
     </div>

@@ -1,10 +1,11 @@
 /* contains global variables for colors */
 :root {
-  --header-clr: #b19cd9;
-  --text-color: #b38add;
+  --header-clr: #4c2a56;
+  --header-txt: #b38add;
+  --text-color: black;
   --primary-bkg: #4c2a56;
   --cal-hover: #e0e0e0;
-  --event-clr: #e0e0e0;
+  --event-clr: #b38add;
 }
 
 .App {
@@ -13,11 +14,11 @@
 /* controls header size, color, etc */
 .App-header {
   background-color: var(--header-clr);
-  min-height: 1vh;
+  min-height: 10vh;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   font-size: calc(10px + 2vmin);
-  color: white;
+  color: var(--header-txt);
 }

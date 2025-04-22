@@ -1,32 +1,10 @@
-from django.shortcuts import render, redirect
-from .forms import RegisterForm
-from django.contrib.auth.decorators import login_required
-from django.contrib.auth import login, logout, authenticate
+# Create your views here.
+from django.views.decorators.csrf import csrf_exempt
+from django.shortcuts import render
 from django.http import JsonResponse
 from .models import Event
-from django.views.decorators.csrf import csrf_exempt
+from .models import Room 
 import json
-
-@login_required(login_url='/login')
-def home(request):
-    return redirect('/app/')
-
-
-def LogOut(request):
-    logout(request)
-    return redirect('/login/')
-
-def sign_up(request):
-    if request.method == 'POST':
-        form = RegisterForm(request.POST)
-        if form.is_valid():
-            user = form.save()
-            login(request, user)
-            return redirect('/login/')
-    else:
-        form = RegisterForm()
-
-    return render(request, 'registration/sign_up.html', {"form": form})
 
 @csrf_exempt
 def add_event(request):
@@ -34,6 +12,9 @@ def add_event(request):
     if request.method == "POST":      
         try:
             data = json.loads(request.body) # Parse the event data from the request
+            # Check to see if data is retrieved in terminal
+            # print("Received data: ", request.body)
+            # print("Title: ", data.get('EventName'))
 
             # create variables corresponding to body
             day = data.get('Day')
@@ -42,6 +23,7 @@ def add_event(request):
             title = data.get('EventName')
             time_from = data.get('TimeFrom')
             time_to = data.get('TimeTo')   
+            # print(day, month, year, title, time_from, time_to)    # test accuracy
             
             # Save to the database
             event = Event.objects.create(
@@ -53,15 +35,11 @@ def add_event(request):
                 TimeTo=time_to,
             )
 
-            print("Created event:", event)
-            print("Returning event_id:", event.event_id)
-
             # if not all([day, month, year, title, time_from, time_to]):
             #     return JsonResponse({'error': 'Missing required fields'}, status=400)
 
             # return JsonResponse({"message": "Event has been added successfully!"}, status=201)
-            return JsonResponse({"message": "Event added successfully!", 
-            "event": {
+            return JsonResponse({"message": "Event added successfully!", "event": {
                 "id": event.event_id,  # Primary key (EventCode)
                 "day": event.Day,
                 "month": event.Month,
@@ -80,19 +58,40 @@ def fetch_events(request):
         year = request.GET.get("year")
         event = Event.objects.filter(Month=month, Year=year).values()
         return JsonResponse(list(event), safe=False)
+@csrf_exempt   
+def add_room(request):
+    if request.method == "POST":
+        try:
+            data = json.loads(request.body) # Parse the event data from the request
+            print(f"Received data: {data}")  # Log the data to verify
+            # Check to see if data is retrieved in terminal
+            # print("Received data: ", request.body)
+            # print("Title: ", data.get('EventName'))
 
-@csrf_exempt
-def delete_event(request, event_id):
-    if request.method == "DELETE":
-        try :
-            # data = json.loads(request.body)
-            # event_id = data.get(id = event_id)
+            # create variables corresponding to body
+            code = data.get('RoomCode')
+            url = data.get('RoomURL')
+
+              
+            # print(day, month, year, title, time_from, time_to)    # test accuracy
             
-            event_to_delete = Event.objects.get(event_id = event_id)
-            event_to_delete.delete()
-            # print(f"DELETE called for event_id: {event_id}")
-            
-            return JsonResponse({'message': 'Event deleted successfully'}, status=200)
+            # Save to the database
+            room = Room.objects.create(
+                RoomCode = code,
+                RoomURL = url,
+            )
+
+            # if not all([day, month, year, title, time_from, time_to]):
+            #     return JsonResponse({'error': 'Missing required fields'}, status=400)
+
+            # return JsonResponse({"message": "Event has been added successfully!"}, status=201)
+            return JsonResponse({"message": "Room added successfully!", "room": {
+                "id": room.room_id,  # Primary key 
+                "code": room.RoomCode,
+                "url": room.RoomURL
+            }}, status=201)
         except Exception as e:
-            return JsonResponse({'message': 'Delete unsuccessful or event not found'}, status=404)
-    return JsonResponse({'error: invalid request method.'}, status=405)
+            return JsonResponse({"error": str(e)}, status=400)
+    return JsonResponse({'error': 'Invalid request method'}, status=405)
+
+

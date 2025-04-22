@@ -12,3 +12,10 @@ class Event(models.Model):
     class Meta:
         db_table = 'app_events'
 
+class Room(models.Model):
+    room_id = models.AutoField(primary_key=True, db_column='RoomCodeID')  # Use your actual primary key column here
+    RoomCode = models.CharField(max_length=10)
+    RoomURL = models.URLField()
+
+    class Meta:
+        db_table = 'Room'

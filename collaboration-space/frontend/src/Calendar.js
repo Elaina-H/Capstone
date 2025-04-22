@@ -60,7 +60,7 @@ const Calendar = ({ eventsArr, addEvent, deleteEventAndTask }) => {
 
   const [eventDate, setEventDate] = useState("");
   
-  
+ 
 
 
   /* Update the time every second */
@@ -143,63 +143,60 @@ const Calendar = ({ eventsArr, addEvent, deleteEventAndTask }) => {
   };
 
   /* update with adding dates to database*/
-
+ 
   const addNewEvent = async () => {
     console.log("Event Date: ", eventDate);
     const [year, month, day] = eventDate.split("-").map(Number);
+    
+	  const newEvent = {
+	    Day: day,
+      Month: month,
+      Year: year,
+      EventName: eventName,
+      TimeFrom: eventTimeFrom,
+      TimeTo: eventTimeTo,
+      // events: [{ title: eventName, time: `${eventTimeFrom} - ${eventTimeTo}` }],
+    };
+    console.log("Year:", year);  
+    console.log("Month:", month); 
+    console.log("Day:", day);
+    console.log("Title:", eventName);
+    console.log("Time:", eventTimeFrom, " ", eventTimeTo);
+    console.log("New Event: ", newEvent);
+
+    // console.log('Event data:', newEvent);
+
+    // await Event.create(new Event);
+    // const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
     const csrfToken = Cookies.get('csrftoken');
 
 
-    try {
-      const response = await axios.post('http://127.0.0.1:8000/api/add_event/', { 
-        Day: day,
-        Month: month,
-        Year: year,
-        EventName: eventName,
-        TimeFrom: eventTimeFrom,
-        TimeTo: eventTimeTo,
-      }, {
-        headers: {
-          'X-CSRFToken': csrfToken, // Add a method to retrieve the token
-          'Content-Type': 'application/json',
-        }
+    axios.post('http://127.0.0.1:8000/api/add_event/', newEvent, { 
+      headers: {
+        'X-CSRFToken': csrfToken, // Add a method to retrieve the token
+        'Content-Type': 'application/json',
+      }
+    })
+      .then(response => {
+        console.log("Event added: ", response.data);
+        addEvent(newEvent);
+        setEventName("");
+        setEventTimeFrom("");
+        setEventTimeTo("");
+        setEventDate("");
+        setShowEventForm(false);
+      })
+      .catch(error => {
+        console.error("Error adding an event: ", error);
+        alert("Error adding event.");
       });
-
-      console.log("Full backend response:", response.data);
-  
-      const backendEvent = response.data.event;
-      const eventID = backendEvent.id;
-      console.log("Event ID:", eventID);
-
-      
-      const newEvent = {
-        Day: day,
-        Month: month,
-        Year: year,
-        EventName: eventName,
-        TimeFrom: eventTimeFrom,
-        TimeTo: eventTimeTo,
-        event_id: eventID,
-      };
-
-      addEvent(newEvent);
-      setEventName("");
-      setEventTimeFrom("");
-      setEventTimeTo("");        
-      setEventDate("");
-      setShowEventForm(false);
-
-      console.log("Year:", year);  
-      console.log("Month:", month); 
-      console.log("Day:", day);
-      console.log("Title:", eventName);
-      console.log("Time:", eventTimeFrom, " ", eventTimeTo);
-      console.log("New Event: ", newEvent);
-    } catch (error) {
-      console.error("Error adding event: ", error);
-      alert("Error adding event.");
-    }
+    /*const updatedEvents = [...eventsArr, newEvent];
+    setEventsArr(updatedEvents);
+    localStorage.setItem("events", JSON.stringify(updatedEvents));*/
+    
   };
+  
+
   
 	/* update to display events from database*/
   const getWeekEvents = () => {
@@ -231,9 +228,9 @@ const Calendar = ({ eventsArr, addEvent, deleteEventAndTask }) => {
         <div className="cascade-layer"></div>
         <div className="calendar">
           <div className="month">
-            <button className="prev-month" onClick={prevMonth}></button>
+            <button className="prev-month" onClick={prevMonth}>prev</button>
             <div className="date">{months[month]} {year}</div>
-            <button className="next-month" onClick={nextMonth}></button>
+            <button className="next-month" onClick={nextMonth}>next</button>
           </div>
 
           <div className="weekdays">
@@ -267,15 +264,12 @@ const Calendar = ({ eventsArr, addEvent, deleteEventAndTask }) => {
 		{/* FIXME Display this week's events */}
         <div className="event-dropdowns">
           <div className="dropdown">
-            <button className="dropbtn">Upcoming Events This Week</button>
+            <button className="dropbtn" >Upcoming Events This Week</button>
             <div className="dropdown-content">
-              if (getWeekEvents().length != 0)  {
-				<div>events this week</div>
-			} else {
-				<div>No events this week</div>
-			}
-			
-		   </div>
+              {getWeekEvents().map((event, index) => (
+                <div key={index}>{event.Day} {months[event.Month - 1]}: {event.EventName} ({event.TimeFrom} - {event.TimeTo})</div>
+              ))}
+            </div>
 		  </div>
 		  
 		  {/* FIXME Display this month's events */}
@@ -292,7 +286,6 @@ const Calendar = ({ eventsArr, addEvent, deleteEventAndTask }) => {
         
 
 {/* Display events for selected day*/}
-        
         <div className="events">
           {eventsArr.filter(event => event.Day === activeDay && event.Month === month + 1 && event.Year === year).map((event, index) => (
             <div key={index} className="event">
