@@ -3,6 +3,8 @@ import React, { useState, useEffect } from 'react';
 import Calendar from './Calendar';
 import Todo from './Todo';
 import Studyroom from './Studyroom';
+import axios from 'axios';
+
 
 function App() {
 
@@ -38,30 +40,98 @@ function App() {
     localStorage.setItem("tasks", JSON.stringify(updatedTasks));
   };
 
+<<<<<<< HEAD
 
   const addEvent = (event) => {
+=======
+  const addEvent = async (event) => {
+>>>>>>> main
     const updatedEvents = [...eventsArr, event];
     setEventsArr(updatedEvents);
     localStorage.setItem("events", JSON.stringify(updatedEvents));
-    addTask(event.events[0].title);
+    // addTask(event.event_id);
+    addTask(event.EventName);
+    
+    // addTask(event.events[0].title);
   };
 
+  // Deletes an event from the backend
+  const deleteEventfromBackend = async (eventID) => {
+    console.log("Calling backend delete for eventId:", eventID);
+    try {
+      const response = await fetch(`http://127.0.0.1:8000/api/delete_event/${eventID}/`, {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
 
-  const deleteEventAndTask = (eventToDelete, taskIndex) => {
-    if (eventToDelete) {
-      //removing event from eventsArr
-      setEventsArr((eventsArr) => eventsArr.filter((event) => event !== eventToDelete));
+      if (!response.ok) {
+        throw new Error('event_id not found');
+      }
+  
+      const data = await response.json();
+      console.log(data.message);
+      return data;
 
-      // finding corresponding task in tasks and removing it
-      const taskToDelete = eventToDelete.events[0].title;
-      setTasks((tasks) => tasks.filter((task) => task !== taskToDelete));
-    } else {
-      // removing task from tasks
+    }catch (error) {
+      console.error("Delete error:", error);
+      throw error;
+    }
+  };
+
+  const deleteEventAndTask = async (eventToDelete, taskIndex) => {
+    console.log("eventToDelete:", eventToDelete);
+    console.log("event_id:", eventToDelete?.event_id);
+  
+    // Determine if we have an event_id
+    const eventId = eventToDelete?.event_id;
+  
+    // Delete from backend if event_id is available
+    if (eventId) {
+      // delete from backend
+      await deleteEventfromBackend(eventToDelete.event_id);
+    
+      // Remove event from state
+      setEventsArr((prevEvents) =>
+        prevEvents.filter((event) => event.event_id !== eventToDelete.event_id)
+      );
+    
+      // Remove matching task (by title)
+      const taskToDelete = eventToDelete.EventName;
+      setTasks((prevTasks) => prevTasks.filter((task) => task !== taskToDelete));
+    }
+    // if no event_id is available (a task)
+    else {
+      // Get the task title from index
       const taskToDelete = tasks[taskIndex];
-      setTasks((tasks) => tasks.filter((_, i) => i !== taskIndex));
-
-      // removing corresponding event from eventsArr
-      setEventsArr((eventsArr) => eventsArr.filter((event) => event.events[0].title !== taskToDelete));
+      console.log("Task to delete (array position):", taskIndex, taskToDelete);
+    
+      // Try to find a matching event in eventsArr using EventName
+      const matchingEvent = eventsArr.find(event => event.EventName === taskToDelete);
+    
+      if (matchingEvent?.event_id) {
+        // Found a matching event with event_id — delete from backend and state
+        await deleteEventfromBackend(matchingEvent.event_id);
+    
+        // Remove from calendar state
+        setEventsArr(prevEvents =>
+          prevEvents.filter(event => event.event_id !== matchingEvent.event_id)
+        );
+      } 
+      else {
+        console.warn("No matching event found with EventName:", taskToDelete);
+    
+        // Fallback: Just remove from calendar state by EventName
+        setEventsArr(prevEvents =>
+          prevEvents.filter(event => event.EventName !== taskToDelete)
+        );
+      }
+    
+      // Remove from tasks state
+      setTasks(prevTasks =>
+        prevTasks.filter((_, i) => i !== taskIndex)
+      );
     }
   };
 
@@ -77,6 +147,7 @@ function App() {
       </main>
     </div>
   );
+  
 }
 
 export default App;

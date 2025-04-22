@@ -1,5 +1,11 @@
 import React, { useState, useEffect } from 'react';
+<<<<<<< HEAD
 import './Calendar.css';
+=======
+import './Calendar.css'; 
+import axios from 'axios';
+import Cookies from 'js-cookie';
+>>>>>>> main
 
 /*
 To fix with DB Update:
@@ -14,6 +20,17 @@ return (
 Bugs:
 - scroll goes to specified pixel instead of directly to the element
 */
+
+// function getCsrfToken() {
+//   const cookies = document.cookie.split(';');
+//   for (let i = 0; i < cookies.length; i++) {
+//     const cookie = cookies[i].trim();
+//     if (cookie.startsWith('csrftoken=')) {
+//       return cookie.substring('csrftoken='.length);
+//     }
+//   }
+//   return null; // Return null if the token isn't found
+// }
 
 
 const Calendar = ({ eventsArr, addEvent, deleteEventAndTask, activeDay, setActiveDay, month, setMonth, year, setYear }) => {
@@ -131,13 +148,20 @@ const Calendar = ({ eventsArr, addEvent, deleteEventAndTask, activeDay, setActiv
     setActiveDay(newDate.getDate());
   };
 
+<<<<<<< HEAD
 
 
   /* update with adding dates to database*/
 
   const addNewEvent = () => {
+=======
+  /* update with adding dates to database*/
+>>>>>>> main
 
+  const addNewEvent = async () => {
+    console.log("Event Date: ", eventDate);
     const [year, month, day] = eventDate.split("-").map(Number);
+<<<<<<< HEAD
     const newEvent = {
       day: day,
       month: month,
@@ -145,16 +169,27 @@ const Calendar = ({ eventsArr, addEvent, deleteEventAndTask, activeDay, setActiv
       events: [{ title: eventName, time: `${eventTimeFrom} - ${eventTimeTo}` }],
 
     };
+=======
+    const csrfToken = Cookies.get('csrftoken');
+>>>>>>> main
 
 
-    /*const updatedEvents = [...eventsArr, newEvent];
-    setEventsArr(updatedEvents);
-    localStorage.setItem("events", JSON.stringify(updatedEvents));*/
-    addEvent(newEvent);
-    setEventName("");
-    setEventTimeFrom("");
-    setEventTimeTo("");
+    try {
+      const response = await axios.post('http://127.0.0.1:8000/api/add_event/', { 
+        Day: day,
+        Month: month,
+        Year: year,
+        EventName: eventName,
+        TimeFrom: eventTimeFrom,
+        TimeTo: eventTimeTo,
+      }, {
+        headers: {
+          'X-CSRFToken': csrfToken, // Add a method to retrieve the token
+          'Content-Type': 'application/json',
+        }
+      });
 
+<<<<<<< HEAD
     setEventDate("");
 
     setShowEventForm(false);
@@ -163,6 +198,45 @@ const Calendar = ({ eventsArr, addEvent, deleteEventAndTask, activeDay, setActiv
 
 
   /* update to display events from database*/
+=======
+      console.log("Full backend response:", response.data);
+  
+      const backendEvent = response.data.event;
+      const eventID = backendEvent.id;
+      console.log("Event ID:", eventID);
+
+      
+      const newEvent = {
+        Day: day,
+        Month: month,
+        Year: year,
+        EventName: eventName,
+        TimeFrom: eventTimeFrom,
+        TimeTo: eventTimeTo,
+        event_id: eventID,
+      };
+
+      addEvent(newEvent);
+      setEventName("");
+      setEventTimeFrom("");
+      setEventTimeTo("");        
+      setEventDate("");
+      setShowEventForm(false);
+
+      console.log("Year:", year);  
+      console.log("Month:", month); 
+      console.log("Day:", day);
+      console.log("Title:", eventName);
+      console.log("Time:", eventTimeFrom, " ", eventTimeTo);
+      console.log("New Event: ", newEvent);
+    } catch (error) {
+      console.error("Error adding event: ", error);
+      alert("Error adding event.");
+    }
+  };
+  
+	/* update to display events from database*/
+>>>>>>> main
   const getWeekEvents = () => {
     const today = new Date();
     const firstDayOfWeek = today.getDate() - today.getDay(); // Start of week
@@ -171,16 +245,24 @@ const Calendar = ({ eventsArr, addEvent, deleteEventAndTask, activeDay, setActiv
     const firstDate = new Date(today.setDate(firstDayOfWeek));
     const lastDate = new Date(today.setDate(lastDayOfWeek));
 
+<<<<<<< HEAD
     return eventsArr.filter(event => {
       const eventDate = new Date(event.year, event.month - 1, event.day);
       return eventDate >= firstDate && eventDate <= lastDate;
     });
   };
+=======
+	  return eventsArr.filter(event => {
+		const eventDate = new Date(event.Year, event.Month - 1, event.Day);
+		return eventDate >= firstDate && eventDate <= lastDate;
+	  });
+	};
+>>>>>>> main
 
   /* update to display events from database*/
   const getMonthEvents = () => {
     return eventsArr.filter(
-      (event) => event.month === month + 1 && event.year === year
+      (event) => event.Month === month + 1 && event.Year === year
     );
   };
 
@@ -244,19 +326,25 @@ const Calendar = ({ eventsArr, addEvent, deleteEventAndTask, activeDay, setActiv
             <button className="dropbtn">Upcoming Events This Month</button>
             <div className="dropdown-content">
               {getMonthEvents().map((event, index) => (
-                <div key={index}>{event.day} {months[event.month - 1]}: {event.events[0].title} ({event.events[0].time})</div>
+                <div key={index}>{event.Day} {months[event.Month - 1]}: {event.EventName} ({event.TimeFrom} - {event.TimeTo})</div>
               ))}
             </div>
 
           </div>
         </div>
 
+<<<<<<< HEAD
 
         {/* Display events for selected day*/}
+=======
+{/* Display events for selected day*/}
+        
+>>>>>>> main
         <div className="events">
-          {eventsArr.filter(event => event.day === activeDay && event.month === month + 1 && event.year === year).map((event, index) => (
+          {eventsArr.filter(event => event.Day === activeDay && event.Month === month + 1 && event.Year === year).map((event, index) => (
             <div key={index} className="event">
               <div className="title">
+<<<<<<< HEAD
                 <i className="fas fa-circle"></i>
                 <h3 className="event-title">{event.events[0].title}</h3>
               </div>
@@ -265,6 +353,16 @@ const Calendar = ({ eventsArr, addEvent, deleteEventAndTask, activeDay, setActiv
               </div>
               <button className="delete-event-btn" onClick={() => deleteEventAndTask(event, index)}>Delete</button>
             </div>
+=======
+			  <i className="fas fa-circle"></i>
+              <h3 className="event-title">{event.EventName}</h3>
+              </div>
+			  <div className="event-time">
+				<span className="event-time">{event.TimeFrom} - {event.TimeTo}</span>
+			  </div>
+				<button className="delete-event-btn" onClick={() => deleteEventAndTask(event, index)}>Delete</button>
+			  </div>
+>>>>>>> main
           ))}
         </div>
 
