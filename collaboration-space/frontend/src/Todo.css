@@ -74,8 +74,13 @@ html, body {
 
 .left li span {
   flex: 1;
+  max-width: 150px; 
   word-break: break-word;
   margin-right: 10px;
+  border-radius: 4px;
+  cursor: grab;
+  background-color: #ddd;
+  padding: 5px 10px;
 }
 
 

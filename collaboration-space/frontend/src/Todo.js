@@ -1,15 +1,27 @@
 import React, { useState, useEffect } from 'react';
 import './Todo.css'; 
 
-
-
 const Todo = ({ tasks, addTask, deleteEventAndTask }) => {
+
+  // const [taskInput, setTaskInput] = useState("");
+
+  // const addNewTask = () => {
+  //   if (taskInput.trim()) {
+  //     addTask(taskInput);
+  //     setTaskInput("");
+  //   }
+  // };
 
   const [taskInput, setTaskInput] = useState("");
 
   const addNewTask = () => {
     if (taskInput.trim()) {
-      addTask(taskInput);
+      const newTask = {
+        text: taskInput,
+        x: 50,
+        y: 50
+      };
+      addTask(newTask); 
       setTaskInput("");
     }
   };
@@ -60,6 +72,17 @@ const Todo = ({ tasks, addTask, deleteEventAndTask }) => {
     };
   }, []);
 
+  // const [draggingIndex, setDraggingIndex] = useState(null);
+  // const [dragOffset, setDragOffset] = useState({ x: 0, y: 0 });
+
+  const handleDragStart = (e, task) => {
+    e.dataTransfer.setData("text/plain", JSON.stringify(task));
+  };
+
+  const handleDrop = (e) => {
+    console.log("dropped");
+  };
+
   return (
     <div className="outer">
       <div className="left">
@@ -74,15 +97,24 @@ const Todo = ({ tasks, addTask, deleteEventAndTask }) => {
         <ul>
           {tasks.map((task, index) => (
             <li key={index}>
-              <span>{task}</span>
+              <span
+                draggable
+                onDragStart={(e)=> handleDragStart(e, task)}
+              >
+                {task.text}
+              </span> 
               <button onClick={() => deleteEventAndTask(null, index)}>Delete</button>
             </li>
           ))}
         </ul>
       </div>
       <div className="right" id="board">
-        <div id="canvas"></div>
+        <div id="canvas"
+          onDragOver={(e) => e.preventDefault()}
+          onDrop = {handleDrop}
+        ></div>
         {/* Additional content can go here */}
+        
       </div>
     </div>
   );

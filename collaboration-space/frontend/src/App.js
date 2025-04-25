@@ -41,9 +41,13 @@ function App() {
     setEventsArr(updatedEvents);
     localStorage.setItem("events", JSON.stringify(updatedEvents));
     // addTask(event.event_id);
-    addTask(event.EventName);
-    
-    // addTask(event.events[0].title);
+    // addTask(event.EventName);
+
+    addTask({
+      text: event.EventName,
+      x: 50,
+      y: 50
+    });    
   };
 
   // Deletes an event from the backend
