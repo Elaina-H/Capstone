@@ -14,6 +14,8 @@ const Todo = ({ tasks, addTask, deleteEventAndTask }) => {
 
   const [taskInput, setTaskInput] = useState("");
   const [canvasItems, setCanvasItems] = useState([]); // holds the items inside the canvas
+  const [dragContext, setDragContext] = useState(null); // null, 'canvas', or task index
+  const [dragOffset, setDragOffset] = useState({ x: 0, y: 0 });
 
   const addNewTask = () => {
     if (taskInput.trim()) {
@@ -27,58 +29,59 @@ const Todo = ({ tasks, addTask, deleteEventAndTask }) => {
     }
   };
 
-  // Create panning movement for visual todo 
+  // Create panning or task movement
   useEffect(() => {
-    const canvas = document.getElementById('canvas');
-    if (!canvas) {
-      console.error('Canvas not found!');
-      return;
-    }
+    const handleMouseMove = (e) => {
+      if (dragContext === null) return;
 
-    let isDragging = false;
-    let offsetX = 0;
-    let offsetY = 0;
-
-    // On click
-    const mouseDown = (e) => {
-      isDragging = true;
-      offsetX = e.clientX - canvas.offsetLeft;
-      offsetY = e.clientY - canvas.offsetTop;
-      canvas.style.cursor = 'grabbing';
-    };
-
-    // mouse movement
-    const mouseMove = (e) => {
-      if (isDragging) {
-        canvas.style.left = `${e.clientX - offsetX}px`;
-        canvas.style.top = `${e.clientY - offsetY}px`;
+      // else if moving the tasks
+      if (typeof dragContext === 'number') {
+        const updatedItems = [...canvasItems];
+        updatedItems[dragContext] = {
+          ...updatedItems[dragContext],
+          x: e.clientX - dragOffset.x,
+          y: e.clientY - dragOffset.y,
+        };
+        setCanvasItems(updatedItems);
       }
     };
-
-    // Release click
-    const mouseUp = () => {
-      isDragging = false;
-      canvas.style.cursor = 'grab';
+    
+    // release click
+    const handleMouseUp = () => {
+      setDragContext(null);
     };
 
-    canvas.addEventListener('mousedown', mouseDown);
-    document.addEventListener('mousemove', mouseMove);
-    document.addEventListener('mouseup', mouseUp);
+    document.addEventListener("mousemove", handleMouseMove);
+    document.addEventListener("mouseup", handleMouseUp);
 
-    // Cleanup
     return () => {
-      canvas.removeEventListener('mousedown', mouseDown);
-      document.removeEventListener('mousemove', mouseMove);
-      document.removeEventListener('mouseup', mouseUp);
+      document.removeEventListener("mousemove", handleMouseMove);
+      document.removeEventListener("mouseup", handleMouseUp);
     };
-  }, []);
+  }, [dragContext, dragOffset, canvasItems]);
 
-  // Drag feature
-  const handleDragStart = (e, task) => {
-    e.dataTransfer.setData("text/plain", JSON.stringify(task));
+  // click on canvas
+  const handleCanvasMouseDown = (e) => {
+    if (e.target.id !== 'canvas') return;
+    const canvas = e.target;
+    setDragContext('canvas');
+    setDragOffset({
+      x: e.clientX - canvas.offsetLeft,
+      y: e.clientY - canvas.offsetTop,
+    });
   };
 
-  // Drop feature
+  // click on task
+  const handleTaskMouseDown = (e, index) => {
+    const task = canvasItems[index];
+    setDragContext(index);
+    setDragOffset({
+      x: e.clientX - task.x,
+      y: e.clientY - task.y,
+    });
+  };
+
+  // Drop feature onto canvas
   const handleDrop = (e) => {
     e.preventDefault();
     console.log("dropped");
@@ -97,7 +100,6 @@ const Todo = ({ tasks, addTask, deleteEventAndTask }) => {
     };
 
     setCanvasItems((prev) => [...prev, droppedBox]);
-
   };
   
 
@@ -118,7 +120,6 @@ const Todo = ({ tasks, addTask, deleteEventAndTask }) => {
               <span
                 draggable
                 onDragStart={(e)=> {
-                  // handleDragStart(e, task)
                   e.dataTransfer.setData("text/plain", JSON.stringify(task));
                 }}
               >
@@ -131,6 +132,7 @@ const Todo = ({ tasks, addTask, deleteEventAndTask }) => {
       </div>
       <div className="right" id="board">
         <div id="canvas"
+          onMouseDown={handleCanvasMouseDown}
           onDragOver={(e) => e.preventDefault()}
           onDrop = {handleDrop}
           style={{ 
@@ -144,7 +146,7 @@ const Todo = ({ tasks, addTask, deleteEventAndTask }) => {
           {canvasItems.map((item, index) => (
             <div
               key={index}
-              // onMouseDown={(e) => mouseDown(e, index)}
+              onMouseDown={(e) => handleTaskMouseDown(e, index)}
               style= {{
                 position: "absolute",
                 top: item.y,
