@@ -120,8 +120,47 @@ html, body {
   height: 3000px;
   background-image: radial-gradient(#333 1px, transparent 1px);
   background-size: 30px 30px;
-  position: absolute;
+  position: relative;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
+}
+
+#line {
+  position: absolute;
+  width: 2px;
+  height: 100%;
+  background-color: #000;
+  cursor: ew-resize;
+}
+
+.node {
+  width: 8px;
+  height: 8px;
+  border: 2px solid #333;
+  border-radius: 50%;
+  background-color: transparent;
+  cursor: crosshair;
+  position: relative;
+}
+
+.left-node {
+  margin-right: 5px;
+}
+
+.right-node {
+  margin-left: 5px;
+}
+
+.right .clear-button{
+  position: absolute;
+  top: 20px;        /* 20px from the top */
+  right: 20px;      /* 20px from the right */
+  z-index: 30;      /* Ensure the button appears on top of other content */
+  padding: 10px 15px;
+  background-color: #ffffff;
+  color: white;
+  border: none;
+  border-radius: 3px;
+  cursor: pointer;
 }
