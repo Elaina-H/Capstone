@@ -1,10 +1,18 @@
 {% extends 'main/base.html' %} {% block title %}Sign Up{% endblock %}
 {% load crispy_forms_tags %} {% block content %}
-<form method="post">
-{% csrf_token %}{{form|crispy}}
-<p>Have an account? Login <a href="/login">Here</a>!</p>
-<button type="submit" class="btn btn-success login-btn">Register</button>
-</form>
+<div class="d-flex justify-content-center align-items-center vh-100">
+    <div class="card shadow-lg p-4" style="width: 400px; border-radius: 10px;">
+        <h3 class="text-center mb-4">Sign Up</h3>
+        <form method="post">
+            {% csrf_token %}
+            {{ form|crispy }}
+            <button type="submit" class="btn btn-primary w-100 login-btn">Register</button>
+        </form>
+        <p class="text-center mt-3">
+            Already have an account? <a href="/login">Sign In</a>
+        </p>
+    </div>
+</div>
 {% endblock %}
 
 {% block extra_styles %}
@@ -13,18 +21,18 @@
         background-color: #b19cd9 !important;
     }
     .nav-link, .navbar-text {
-        color: #000000 !important;
+        color: #000000;
     }
     .nav-link:hover {
-        color: #333333 !important;
+        color: #333333;
     }
     .login-btn {
-        background-color: #4c2a56 !important;
-        border-color: #4c2a56 !important;
+        background-color: #4c2a56;
+        border-color: #4c2a56;
     }
     .login-btn:hover {
-        background-color: #3a2043 !important; /* Slightly darker shade for hover effect */
-        border-color: #3a2043 !important;
+        background-color: #3a2043;
+        border-color: #3a2043;
     }
 </style>
 {% endblock %}

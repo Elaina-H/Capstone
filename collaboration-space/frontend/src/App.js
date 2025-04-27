@@ -20,6 +20,11 @@ function App() {
     return savedEvents || [];
   });
 
+  const [subitems, setSubitems] = useState(() => {
+    const savedSubitems = JSON.parse(localStorage.getItem("subitems"));
+    return savedSubitems || {};
+  });
+
   // saving task strings to local storage, updating when "tasks" changes
   useEffect(() => {
     localStorage.setItem("tasks", JSON.stringify(tasks));
@@ -30,10 +35,18 @@ function App() {
     localStorage.setItem("events", JSON.stringify(eventsArr));
   }, [eventsArr]);
 
+  // saving subitems to local storage, updating when "subitems" changes
+  useEffect(() => {
+    localStorage.setItem("subitems", JSON.stringify(subitems));
+  }, [subitems]);
+
   const addTask = (task) => {
     const updatedTasks = [...tasks, task];
     setTasks(updatedTasks);
     localStorage.setItem("tasks", JSON.stringify(updatedTasks));
+    setSubitems(prevSubitems => ({ ...prevSubitems,
+      [task]: [],
+    }));
   };
 
   const addEvent = async (event) => {
@@ -91,6 +104,13 @@ function App() {
       // Remove matching task (by title)
       const taskToDelete = eventToDelete.EventName;
       setTasks((prevTasks) => prevTasks.filter((task) => task !== taskToDelete));
+
+      setSubitems((prevSubitems) => {
+        const updatedSubitems = { ...prevSubitems };
+        console.log("Deleting subitems when event_id is available:", taskToDelete);
+        delete updatedSubitems[taskToDelete]; // Remove subitems for the task
+        return updatedSubitems;
+      });
     }
     // if no event_id is available (a task)
     else {
@@ -123,6 +143,15 @@ function App() {
       setTasks(prevTasks =>
         prevTasks.filter((_, i) => i !== taskIndex)
       );
+
+      setSubitems((prevSubitems) => {
+        const updatedSubitems = { ...prevSubitems };
+        
+        
+        console.log("Deleting subitems while event_id is not available:", taskToDelete);
+        delete updatedSubitems[taskToDelete]; // Remove subitems for the task
+        return updatedSubitems;
+      });
     }
   };
 
@@ -132,7 +161,7 @@ function App() {
       </header>
 	  <main>
 		<Calendar eventsArr={eventsArr} addEvent={addEvent} deleteEventAndTask={deleteEventAndTask}/>
-		<Todo tasks={tasks} addTask={addTask} deleteEventAndTask={deleteEventAndTask}/>
+		<Todo tasks={tasks} addTask={addTask} deleteEventAndTask={deleteEventAndTask} subitems={subitems} setSubitems={setSubitems}/>
 		<Studyroom />
 	  </main>	
     </div>
