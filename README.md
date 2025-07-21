@@ -13,3 +13,11 @@ Our group wanted to make an educational tool for students that combined the func
 - Terminal 1 in frontend>src must have installed: python, node.js, django. Then run "npm start" on command line
 - Terminal 2 in backend: (1) npm install puppeteer (2) npm run server.js
 - Terminal 3: run SQL server. Not required for all users as long as one is running.
+## Future Goals
+- Migrate SQL database to a secure private server to allow access at any time.
+- Deploy code to an external domain to allow easier demonstration and use.
+- Add additional functions to the site, including chat posts and a group scheduler.
+- Improve state management through react to make it easier to add components and ensure proper display of events.
+## Current Bugs to fix
+- Tasks and Events sometimes un-sync and do not delete together.
+- Database is difficult to manage due to access settings set by Azure. Possible migration to MySQL over msSQL. 
