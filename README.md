@@ -12,4 +12,4 @@ Our group wanted to make an educational tool for students that combined the func
 ## Project Setup
 - Terminal 1 in frontend>src must have installed: python, node.js, django. Then run "npm start" on command line
 - Terminal 2 in backend: (1) npm install puppeteer (2) npm run server.js
-- Terminal 3: run SQL server
+- Terminal 3: run SQL server. Not required for all users as long as one is running.
