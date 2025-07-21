@@ -10,5 +10,6 @@ Our group wanted to make an educational tool for students that combined the func
 - Password-Protected secure room
 - Collaboration for up to 10 people
 ## Project Setup
-- With Node.js installed, navigate cd to frontend/src
-- run npm start on command line
+- Terminal 1 in frontend>src must have installed: python, node.js, django. Then run "npm start" on command line
+- Terminal 2 in backend: (1) npm install puppeteer (2) npm run server.js
+- Terminal 3: run SQL server
