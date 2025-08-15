@@ -7,7 +7,7 @@ from .models import Event, Room
 from django.views.decorators.csrf import csrf_exempt
 import json
 
-@login_required(login_url='/login')
+# @login_required(login_url='/login')
 def home(request):
     return redirect('/app/')
 
