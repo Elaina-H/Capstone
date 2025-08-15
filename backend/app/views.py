@@ -1,13 +1,15 @@
 from django.shortcuts import render, redirect
-from .forms import RegisterForm
-from django.contrib.auth.decorators import login_required
-from django.contrib.auth import login, logout, authenticate
+
 from django.http import JsonResponse
 from .models import Event, Room
 from django.views.decorators.csrf import csrf_exempt
 import json
 
-# @login_required(login_url='/login')
+'''
+ @login_required(login_url='/login')
+ from .forms import RegisterForm
+ from django.contrib.auth.decorators import login_required
+ from django.contrib.auth import login, logout, authenticate
 def home(request):
     return redirect('/app/')
 
@@ -27,7 +29,7 @@ def sign_up(request):
         form = RegisterForm()
 
     return render(request, 'registration/sign_up.html', {"form": form})
-
+'''
 @csrf_exempt
 def add_event(request):
 
