@@ -1,0 +1,134 @@
+/* General Reset */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: Arial, sans-serif;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  width: 100%;
+  background-color: var(--primary-bkg);
+  font-size: 14px;
+  color: var(--text-color);
+}
+
+.outer {
+  display: flex;
+  justify-content: center;
+  padding-top: 3%;
+  padding-bottom: 3%;
+  width: 100%;
+  /* Make sure it's 100% of the screen width */
+  height: 100%;
+  /* Make sure it's 100% of the screen height */
+  min-height: 78.40vh;
+  overflow: hidden;
+}
+
+.main {
+  width: 95%;
+  position: relative;
+  padding: 0;
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+}
+
+/* Styles for the top section with flexbox */
+.top-section {
+  display: flex;
+  align-items: center;
+  /* Align items vertically in the center */
+  gap: 20px;
+  /* Add space between the date box and the room size selection */
+  margin-bottom: 20px;
+  /* Add some margin below this section */
+}
+
+/* Styles for the date box */
+.date-box {
+  padding: 10px;
+  background-color: #f0f0f0;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: bold;
+  color: #333;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+  white-space: nowrap;
+  /* Prevent the date from wrapping to a new line */
+}
+
+/* Styles for the room-size section */
+.room-size {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  /* Align the radio buttons vertically */
+}
+
+.room-size h2 {
+  font-size: 16px;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+/* Styling the radio buttons in a row */
+.radio-buttons {
+  display: flex;
+  gap: 15px;
+  align-items: center;
+}
+
+.radio-buttons input[type="radio"] {
+  margin-right: 0px;
+  margin-left: 15px;
+}
+
+.radio-buttons label {
+  font-size: 14px;
+  cursor: pointer;
+  margin-left: 0px;
+}
+
+.room-list-image {
+  width: 100%;
+  height: auto;
+  max-width: 700px;
+  margin-top: 20px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 600px) {
+  .top-section {
+    flex-direction: column;
+    /* Stack date and room-size vertically on small screens */
+    align-items: flex-start;
+  }
+
+  .date-box,
+  .room-size {
+    width: 100%;
+    /* Make full width for small screens */
+  }
+
+  .radio-buttons {
+    flex-wrap: wrap;
+    /* Wrap radio buttons on small screens */
+  }
+}
+
+.scr-up {
+	background: var(--primary-bkg);
+	color: white;
+  padding: 15px 45px;
+  margin-top: 150px;
+	border-radius: 4px;
+  border-style: hidden;
+}

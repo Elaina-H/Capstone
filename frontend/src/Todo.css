@@ -1,0 +1,175 @@
+/* General Reset */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: Arial, sans-serif;
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  width: 100%;
+  background-color: var(--primary-bkg);
+  font-size: 14px;
+  color: var(--text-color);
+}
+
+.outer {
+  display: flex;
+  justify-content: center;
+  padding-top: 0%;
+  padding-bottom: 0%;
+  width: 100%; /* Make sure it's 100% of the screen width */
+  height: 100%; /* Make sure it's 100% of the screen height */
+  min-height: 78.40vh;
+  overflow: hidden;
+}
+
+/* Left Section: Basic List */
+.left {
+  width: 60%;
+  position: relative;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+}
+
+.left h2 {
+  margin-bottom: 20px;
+}
+
+.left input {
+  width: calc(100% - 22px);
+  padding: 10px;
+  margin-bottom: 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.left button {
+  padding: 10px 20px;
+  border: none;
+  background-color: var(--primary-bkg);
+  color: white;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.left ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+.left li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  border-bottom: 1px solid #ddd;
+  word-wrap: break-word;
+}
+
+.left li span {
+  flex: 1;
+  max-width: 150px; 
+  word-break: break-word;
+  margin-right: 10px;
+  border-radius: 4px;
+  cursor: grab;
+  background-color: #ddd;
+  padding: 5px 10px;
+}
+
+
+.left li button {
+  background-color: #d32f2f;
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  border-radius: 4px;
+  cursor: pointer;
+
+}
+
+.right li button{
+  background-color: #333;
+  position: relative;
+  border: none;
+  border-radius: 5px;
+  padding: 5px 10px;
+  cursor: pointer;
+}
+
+.right {
+  width: 35%;
+  height: 500px;
+  background-color: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  position: relative;
+  cursor: grab;
+  user-select: none;
+}
+
+#canvas {
+  width: 3000px;
+  height: 100%;
+  background-image: radial-gradient(#333 1px, transparent 1px);
+  background-size: 30px 30px;
+  position: relative;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+#line {
+  position: absolute;
+  width: 2px;
+  height: 100%;
+  background-color: #000;
+  cursor: ew-resize;
+}
+
+.node {
+  width: 8px;
+  height: 8px;
+  border: 2px solid #333;
+  border-radius: 50%;
+  background-color: transparent;
+  cursor: crosshair;
+  position: relative;
+}
+
+.left-node {
+  margin-right: 5px;
+}
+
+.right-node {
+  margin-left: 5px;
+}
+
+.right .clear-button{
+  position: absolute;
+  top: 20px;       
+  right: 20px;     
+  z-index: 30;      /* Ensure the button appears on top of other content */
+  padding: 10px 15px;
+  background-color: #ffffff;
+  color: white;
+  border: none;
+  border-radius: 3px;
+  cursor: pointer;
+}
+
+.scr-up {
+	background: var(--primary-bkg);
+	color: white;
+  padding: 15px 45px;
+  margin-top: 480px;
+	border-radius: 4px;
+  border-style: hidden;
+}
