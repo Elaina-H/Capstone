@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-qcmm0bnqg5bd76w9z!7ys4&^o1m*0uio9_1c*ba@hyt#g1*!ku
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ['https://capstone-31lo.onrender.com', 'https://groupwork.live']
+ALLOWED_HOSTS = ['capstone-31lo.onrender.com', 'groupwork.live']
 
 
 # Application definition
@@ -61,10 +61,10 @@ CSRF_COOKIE_HTTPONLY = False
 CORS_ALLOW_CREDENTIALS = True
 
 CSRF_TRUSTED_ORIGINS = [
-    'http://localhost:3000/',  # React URL
-    "http://127.0.0.1:3000/",
-    "http://localhost:8000/",
-    'https://groupwork.live/',
+    'http://localhost:3000',  # React URL
+    "http://127.0.0.1:3000",
+    "http://localhost:8000",
+    'https://groupwork.live',
 ]
 
 
