@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-qcmm0bnqg5bd76w9z!7ys4&^o1m*0uio9_1c*ba@hyt#g1*!ku
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['https://capstone-31lo.onrender.com', 'https://groupwork.live']
 
 
 # Application definition
