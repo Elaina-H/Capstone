@@ -149,7 +149,7 @@ def delete_event(request, event_id):
         except Exception as e:
             return JsonResponse({'message': 'Delete unsuccessful or event not found'}, status=404)
     return JsonResponse({'error: invalid request method.'}, status=405)
-
+@csrf_exempt
 def delete_task(request, task_id):
     if request.method == "DELETE":
         try:
