@@ -75,6 +75,7 @@ def add_event(request):
             return JsonResponse({"error": str(e)}, status=400)
     return JsonResponse({'error': 'Invalid request method'}, status=405)
 
+@csrf_exempt
 def add_task(request):
     if request.method == "POST":
         try:
@@ -120,6 +121,17 @@ def fetch_events_by_room(request, room_code):
             return JsonResponse(list(events), safe=False)
         except Room.DoesNotExist:
             return JsonResponse({"error": "Room not found"}, status=404)
+        
+def fetch_tasks_by_room(request, room_code):
+    if request.method == "GET":
+        try:
+            room = Room.objects.get(RoomCode=room_code)
+            roomid = room.room_id
+            tasks = Task.objects.filter(RoomID=roomid).values()
+            return JsonResponse(list(tasks), safe=False)
+        except Room.DoesNotExist:
+            return JsonResponse({"error": "Room not foud"}, status=404)
+    
 
 
 @csrf_exempt
@@ -137,6 +149,16 @@ def delete_event(request, event_id):
         except Exception as e:
             return JsonResponse({'message': 'Delete unsuccessful or event not found'}, status=404)
     return JsonResponse({'error: invalid request method.'}, status=405)
+
+def delete_task(request, task_id):
+    if request.method == "DELETE":
+        try:
+            task_to_delete = Task.objects.get(task_id = task_id)
+            task_to_delete.delete()
+            return JsonResponse({'message': 'Task deleted successfully'}, status=200)
+        except Exception as e:
+            return JsonResponse({'message': 'Task failed to delete or not found'}, status=404)
+    return JsonResponse({'error': 'invalid request method'},status=405)
 
 @csrf_exempt
 def add_room(request):
