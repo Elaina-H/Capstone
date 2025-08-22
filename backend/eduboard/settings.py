@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-qcmm0bnqg5bd76w9z!7ys4&^o1m*0uio9_1c*ba@hyt#g1*!ku
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['capstone-31lo.onrender.com', 'groupwork.live']
 
 
 # Application definition
@@ -50,9 +50,6 @@ CORS_ALLOW_ALL_ORIGINS = True
 #   'http://localhost:8000',
 # )
 CORS_ALLOWED_ORIGINS = [
-    'http://localhost:3000',
-    "http://127.0.0.1:3000",
-    "http://localhost:8000",
     'https://groupwork.live',
 ]
 CSRF_COOKIE_NAME = 'csrftoken'
@@ -61,10 +58,7 @@ CSRF_COOKIE_HTTPONLY = False
 CORS_ALLOW_CREDENTIALS = True
 
 CSRF_TRUSTED_ORIGINS = [
-    'http://localhost:3000/',  # React URL
-    "http://127.0.0.1:3000/",
-    "http://localhost:8000/",
-    'https://groupwork.live/',
+    'https://groupwork.live',
 ]
 
 
@@ -130,8 +124,6 @@ DATABASES = {
     } 
 }
 
-
-
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
 
@@ -178,9 +170,3 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 LOGIN_REDIRECT_URL = '/app/'
 LOGOUT_REDIRECT_URL = '/login/'
-
-CORS_ALLOWED_ORIGINS = [
-    "http://localhost:3000",
-    "http://localhost:8000",
-    "https://groupwork.live",
-]
