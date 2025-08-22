@@ -1,7 +1,7 @@
 from django.db import models
 
 class Event(models.Model):
-    event_id = models.AutoField(primary_key=True, db_column='EventCode', default=None)  # Use your actual primary key column here
+    event_id = models.AutoField(primary_key=True, db_column='EventCode', default=None)  
     Day = models.IntegerField()
     Month = models.IntegerField()
     Year = models.IntegerField()
@@ -14,9 +14,17 @@ class Event(models.Model):
         db_table = 'events'
 
 class Room(models.Model):
-    room_id = models.AutoField(primary_key=True, db_column='RoomCodeID')  # Use your actual primary key column here
+    room_id = models.AutoField(primary_key=True, db_column='RoomCodeID') 
     RoomCode = models.CharField(max_length=10)
     RoomURL = models.URLField()
 
     class Meta:
         db_table = 'room'
+
+class Task(models.Model):
+    task_id = models.AutoField(primary_key=True, db_column='TaskCode', default=None) 
+    EventName = models.CharField(max_length=100)
+    RoomID = models.CharField(max_length=10)
+
+    class Meta:
+        db_table = 'tasks'

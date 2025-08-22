@@ -3,11 +3,11 @@ from .forms import RegisterForm
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import login, logout, authenticate
 from django.http import JsonResponse
-from .models import Event, Room
+from .models import Event, Room, Task
 from django.views.decorators.csrf import csrf_exempt
 import json
 
-@login_required(login_url='/login')
+# @login_required(login_url='/login')
 def home(request):
     return redirect('/app/')
 
@@ -26,7 +26,7 @@ def sign_up(request):
     else:
         form = RegisterForm()
 
-    return render(request, 'registration/sign_up.html', {"form": form})
+    return render(request, 'registration/sign_up.html', {"form": form}) 
 
 @csrf_exempt
 def add_event(request):
@@ -55,13 +55,12 @@ def add_event(request):
                 RoomID = room,
             )
 
+            
+            # for testing
             print("Created event:", event)
             print("Returning event_id:", event.event_id)
+            
 
-            # if not all([day, month, year, title, time_from, time_to]):
-            #     return JsonResponse({'error': 'Missing required fields'}, status=400)
-
-            # return JsonResponse({"message": "Event has been added successfully!"}, status=201)
             return JsonResponse({"message": "Event added successfully!", 
             "event": {
                 "id": event.event_id,  # Primary key (EventCode)
@@ -75,6 +74,32 @@ def add_event(request):
         except Exception as e:
             return JsonResponse({"error": str(e)}, status=400)
     return JsonResponse({'error': 'Invalid request method'}, status=405)
+
+def add_task(request):
+    if request.method == "POST":
+        try:
+            #get data from JSON 
+            data = json.loads(request.body)
+            title = data.get('EventName')
+            room = data.get('RoomID')   
+
+            #save to DB 
+            task = Task.objects.create(
+                EventName = title,
+                RoomID = room,
+            )
+            # for testing
+            print("Created Task:", task)
+            print("Returning task ID:", task.task_id)
+            return JsonResponse({"message": "Task added successfully!",
+            "task": {
+                "id": task.task_id, #TaskCode
+                "task_name": task.EventName,
+            }}, status=201)
+        except Exception as e:
+            return JsonResponse({"error": str(e)}, status=400)
+    return JsonResponse({'error': 'Invalid request method'}, status=405)
+
 
 def fetch_events(request):
     print(">>> fetch_events called with:")
